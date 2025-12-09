@@ -2,34 +2,35 @@
 
 import Link from "next/link";
 import { toast } from "sonner";
-import { Lock, Mail } from "lucide-react";
+import { Lock, Mail, User } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/form-error";
-import { loginSchema, LoginSchema } from "../schemas/login";
 import { getErrorMessage } from "@/lib/api/errors";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "@/features/auth";
 import { useRouter } from "next/navigation";
+import { apiClient } from "@/lib/api/client";
+import { registerSchema, RegisterSchema } from "../schemas/register";
 
-export function LoginForm() {
+export function RegisterForm() {
   const router = useRouter();
-  const { mutateAsync: login, isPending } = useLogin();
 
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (data: LoginSchema) => {
+  const onSubmit = async (data: RegisterSchema) => {
     try {
-      await login(data);
-      toast.success("Login realizado com sucesso!");
-      router.replace("/");
+      await apiClient.post("/auth/register", data);
+      toast.success("Conta criada com sucesso!");
+      router.push("/auth");
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);
@@ -41,6 +42,19 @@ export function LoginForm() {
       {/* Card */}
       <div className="w-full rounded-xl border border-border/50 bg-card/50 p-6 shadow-lg backdrop-blur-md sm:p-8">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Name Field */}
+          <div>
+            <Input
+              id="name"
+              type="text"
+              label="Nome completo"
+              placeholder="Digite seu nome"
+              icon={User}
+              {...form.register("name")}
+            />
+            <FormError error={form.formState.errors.name} />
+          </div>
+
           {/* Email Field */}
           <div>
             <Input
@@ -67,31 +81,35 @@ export function LoginForm() {
             <FormError error={form.formState.errors.password} />
           </div>
 
-          {/* Forgot Password Link */}
-          <div className="flex items-center justify-end">
-            <Link
-              href="#"
-              className="text-sm font-medium text-primary hover:underline"
-            >
-              Esqueceu sua senha?
-            </Link>
+          {/* Confirm Password Field */}
+          <div>
+            <Input
+              id="confirmPassword"
+              type="password"
+              label="Confirmar senha"
+              placeholder="Confirme sua senha"
+              icon={Lock}
+              {...form.register("confirmPassword")}
+            />
+            <FormError error={form.formState.errors.confirmPassword} />
           </div>
 
           {/* Submit Button */}
-          <Button className="w-full" disabled={isPending}>
-            {isPending ? "Entrando..." : "Entrar"}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Criando conta..." : "Criar conta"}
           </Button>
         </form>
       </div>
 
-      {/* Register Link */}
+      {/* Login Link */}
       <p className="mt-6 text-center text-sm text-muted-foreground">
-        Não tem uma conta?{" "}
-        <Link
-          href="/auth/register"
-          className="text-primary font-medium hover:underline"
-        >
-          Cadastre-se
+        Já tem uma conta?{" "}
+        <Link href="/auth" className="text-primary font-medium hover:underline">
+          Fazer login
         </Link>
       </p>
     </div>
