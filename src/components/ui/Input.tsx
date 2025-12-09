@@ -17,11 +17,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const IconComponent = icon;
     const hasLeftIcon = IconComponent;
 
-    const inputType = React.useMemo(
-      () => (isPassword && showPassword ? "text" : type),
-      [isPassword, showPassword, type]
-    );
-
     const togglePasswordVisibility = React.useCallback(() => {
       setShowPassword((prev) => !prev);
     }, []);
@@ -49,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           <input
             id={id}
-            type={inputType}
+            type={isPassword && showPassword ? "text" : type}
             ref={ref}
             className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
             {...props}

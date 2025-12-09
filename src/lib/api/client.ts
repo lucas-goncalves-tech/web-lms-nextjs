@@ -17,11 +17,11 @@ apiClient.interceptors.response.use(
     if (
       window !== undefined &&
       error.response?.status === 401 &&
-      window.location.pathname !== "/" &&
+      window.location.pathname !== "/auth" &&
       !error.config?.url?.includes("/auth")
     ) {
-      apiClient.get("/auth/logout");
-      window.location.href = "/";
+      apiClient.delete("/auth/logout");
+      window.location.href = "/auth";
     }
     return Promise.reject(error);
   }

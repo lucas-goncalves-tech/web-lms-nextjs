@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { toast } from "sonner";
 import { Lock, Mail, User } from "lucide-react";
-import { Input } from "@/components/ui/Input";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/form-error";
 import { getErrorMessage } from "@/lib/api/errors";

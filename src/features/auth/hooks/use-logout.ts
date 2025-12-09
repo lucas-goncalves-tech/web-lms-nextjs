@@ -8,13 +8,13 @@ export const useLogout = () => {
 
   return useMutation({
     mutationFn: async () => {
-      await apiClient.post("/auth/logout");
+      await apiClient.delete("/auth/logout");
     },
     onSettled: () => {
       setUser(null);
       queryClient.clear();
       if (window !== undefined) {
-        window.location.href = "/";
+        window.location.href = "/auth";
       }
     },
   });
