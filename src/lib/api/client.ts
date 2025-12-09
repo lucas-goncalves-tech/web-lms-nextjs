@@ -14,15 +14,13 @@ export const apiClient = axios.create({
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Redireciona para login (/) apenas se:
-    // 1. Recebeu 401 (não autorizado / sessão expirada)
-    // 2. NÃO está na página raiz/login (evita loop)
-    // 3. NÃO é a própria requisição de autenticação
     if (
+      window !== undefined &&
       error.response?.status === 401 &&
       window.location.pathname !== "/" &&
       !error.config?.url?.includes("/auth")
     ) {
+      apiClient.get("/auth/logout");
       window.location.href = "/";
     }
     return Promise.reject(error);

@@ -1,5 +1,5 @@
-import { zodPasswordValidator } from "@/validators/common-fields.validator";
-import { zodSafeEmail } from "@/validators/email.validator";
+import { zodPasswordValidator } from "@/validators/common-fields";
+import { zodSafeEmail } from "@/validators/email";
 import { z } from "zod";
 
 export const loginSchema = z.object({

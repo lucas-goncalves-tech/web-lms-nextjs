@@ -1,11 +1,14 @@
 import z from "zod";
-import { zodSafeString } from "./string.validator copy";
+import { zodSafeString } from "./string.validator";
 
 export const zodSlugValidator = (slugName = "Slug") =>
   zodSafeString()
     .min(3, `${slugName} deve ter no mínimo 3 caracteres`)
     .max(30, `${slugName} deve ter no máximo 30 caracteres`)
-    .regex(/^[a-z0-9-]+$/, `${slugName} deve conter apenas letras minúsculas, números e hífens`);
+    .regex(
+      /^[a-z0-9-]+$/,
+      `${slugName} deve conter apenas letras minúsculas, números e hífens`
+    );
 
 export const zodTitleValidator = () =>
   zodSafeString()

@@ -6,7 +6,7 @@ export { useLogin } from "./hooks/use-login";
 export { useCurrentUser } from "./hooks/use-current-user";
 
 // Schemas
-export { loginSchema, type LoginSchema } from "./schemas/login.schema";
+export { loginSchema, type LoginSchema } from "./schemas/login";
 
 // Types
 export type { CurrentUser } from "./hooks/use-current-user";

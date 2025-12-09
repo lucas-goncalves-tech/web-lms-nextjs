@@ -5,13 +5,15 @@ import { toast } from "sonner";
 import { Lock, Mail } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/button";
-import { loginSchema, LoginSchema } from "../schemas/login.schema";
+import { loginSchema, LoginSchema } from "../schemas/login";
 import { getErrorMessage } from "@/lib/api/errors";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "@/features/auth";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
   const { mutateAsync: login, isPending } = useLogin();
 
   const form = useForm<LoginSchema>({
@@ -26,6 +28,7 @@ export function LoginForm() {
     try {
       await login(data);
       toast.success("Login realizado com sucesso!");
+      router.replace("/dashboard");
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);

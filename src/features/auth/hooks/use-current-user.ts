@@ -1,22 +1,43 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
+import { User, userSchema } from "../schemas/user";
+import { useEffect } from "react";
+import { useAuth } from "@/context/auth";
+import { useRouter } from "next/navigation";
 
-export interface CurrentUser {
-  id: string;
-  name: string;
-  email: string;
-  role: "ADMIN" | "INSTRUCTOR" | "STUDENT";
-}
-
-export const useCurrentUser = () => {
-  return useQuery({
+export const useCurrentUser = (enabled = true) => {
+  const { setUser, setIsLoading } = useAuth();
+  const router = useRouter();
+  const query = useQuery({
     queryKey: ["currentUser"],
     queryFn: async () => {
-      const response = await apiClient.get<CurrentUser>("/auth/me");
-      return response.data;
+      const response = await apiClient.get<User>("/auth/me");
+      return userSchema.parse(response.data);
     },
     retry: false,
-    refetchOnWindowFocus: true,
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    enabled,
   });
+
+  useEffect(() => {
+    if (query.error) {
+      setUser(null);
+      router.replace("/");
+    }
+    if (query.data) {
+      setUser(query.data);
+    }
+    if (!query.isLoading) {
+      setIsLoading(false);
+    }
+    //eslint-disable-next-line
+  }, [query.data, query.error, query.isLoading, setIsLoading, setUser]);
+
+  return query;
 };
