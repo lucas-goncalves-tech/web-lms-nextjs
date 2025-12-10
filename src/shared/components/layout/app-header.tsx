@@ -1,5 +1,5 @@
-import { Logo } from "@/components/ui/logo";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Logo } from "@/shared/components/ui/logo";
+import { SidebarTrigger } from "@/shared/components/ui/sidebar";
 
 export function AppHeader() {
   return (

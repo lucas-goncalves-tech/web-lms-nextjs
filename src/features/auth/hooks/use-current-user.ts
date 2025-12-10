@@ -1,10 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api/client";
+import { apiClient } from "@/shared/lib/api/client";
 import { User, userSchema } from "../schemas/user";
 import { useEffect } from "react";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/shared/context/auth";
 import { useRouter } from "next/navigation";
 
 export const useCurrentUser = (enabled = true) => {

@@ -7,8 +7,8 @@ import {
   BookOpen,
   Search,
   Award,
-  User,
   LogOut,
+  Lock,
 } from "lucide-react";
 import {
   Sidebar,
@@ -20,11 +20,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from "@/shared/components/ui/sidebar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/shared/components/ui/avatar";
 import { Button } from "../ui/button";
 import { useLogout } from "@/features/auth";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/shared/context/auth";
 import { SidebarSkeleton } from "./sidebar-loading";
 
 export const navItems = [
@@ -49,9 +53,9 @@ export const navItems = [
     icon: Award,
   },
   {
-    title: "Perfil",
-    href: "/profile",
-    icon: User,
+    title: "Segurança",
+    href: "/secure",
+    icon: Lock,
   },
 ];
 

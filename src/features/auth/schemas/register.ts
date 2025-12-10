@@ -1,6 +1,6 @@
-import { zodPasswordValidator } from "@/validators/common-fields";
-import { zodSafeEmail } from "@/validators/email";
-import { zodSafeString } from "@/validators/string.validator";
+import { zodPasswordValidator } from "@/shared/validators/common-fields";
+import { zodSafeEmail } from "@/shared/validators/email";
+import { zodSafeString } from "@/shared/validators/string.validator";
 import z from "zod";
 
 export const registerSchema = z

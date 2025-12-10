@@ -1,5 +1,5 @@
-import { useAuth } from "@/context/auth";
-import { apiClient } from "@/lib/api/client";
+import { useAuth } from "@/shared/context/auth";
+import { apiClient } from "@/shared/lib/api/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useLogout = () => {
