@@ -38,16 +38,6 @@ export const navItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Meus Cursos",
-    href: "/courses",
-    icon: BookOpen,
-  },
-  {
-    title: "Catálogo de Cursos",
-    href: "/catalog",
-    icon: Search,
-  },
-  {
     title: "Meus Certificados",
     href: "/certificates",
     icon: Award,

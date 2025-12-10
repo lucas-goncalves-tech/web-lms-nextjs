@@ -10,7 +10,9 @@ export default function MainLayout({ children }: PropsWithChildren) {
         <AppSidebar />
         <SidebarInset>
           <AppHeader />
-          <main className="flex-1 p-6 md:p-10">{children}</main>
+          <main className="flex-1 p-6 md:p-5 flex justify-center items-center">
+            {children}
+          </main>
         </SidebarInset>
       </AuthInitializer>
     </SidebarProvider>
