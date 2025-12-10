@@ -25,8 +25,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { useLogout } from "@/features/auth";
 import { useAuth } from "@/context/auth";
+import { SidebarSkeleton } from "./sidebar-loading";
 
-const navItems = [
+export const navItems = [
   {
     title: "Dashboard",
     href: "/",
@@ -59,7 +60,8 @@ export function AppSidebar() {
   const { user } = useAuth();
   const { mutate: logout } = useLogout();
 
-  if (!user) return null;
+  if (!user) return <SidebarSkeleton />;
+
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
@@ -69,12 +71,10 @@ export function AppSidebar() {
             <AvatarFallback>HS</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            {/* Nome do usuário */}
             <span className="text-sm font-medium text-sidebar-foreground">
-              {user?.name}
+              {user.name}
             </span>
-            {/* Email do usuário */}
-            <span className="text-xs text-muted-foreground">{user?.email}</span>
+            <span className="text-xs text-muted-foreground">{user.email}</span>
           </div>
         </div>
       </SidebarHeader>
