@@ -33,7 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div
           className={cn(
-            "flex h-12 w-full items-center gap-3 rounded-lg border border-input bg-background/50 px-4 text-base text-foreground focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/50",
+            "flex h-12 w-full items-center gap-3 overflow-hidden rounded-lg border border-input bg-background/50 px-4 text-base text-foreground focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/50",
             className
           )}
         >
@@ -46,15 +46,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={id}
             type={isPassword && showPassword ? "text" : type}
             ref={ref}
-            className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
+            className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
             {...props}
           />
           {isPassword && (
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-              tabIndex={-1}
+              className="shrink-0 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
