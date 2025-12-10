@@ -5,8 +5,9 @@ export const courseSchema = z.object({
   slug: z.string(),
   title: z.string(),
   description: z.string(),
-  lessons: z.number(),
-  hours: z.number(),
+  totalSeconds: z.number(),
+  totalLessons: z.number(),
+  completedLessons: z.number(),
   created: z.string(),
 });
 

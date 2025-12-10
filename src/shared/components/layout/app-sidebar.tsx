@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  BookOpen,
-  Search,
-  Award,
-  LogOut,
-  Lock,
-} from "lucide-react";
+import { LayoutDashboard, Award, LogOut, Lock } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,

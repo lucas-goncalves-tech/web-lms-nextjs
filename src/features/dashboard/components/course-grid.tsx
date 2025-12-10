@@ -32,10 +32,12 @@ export function CourseGrid() {
           courses?.map((course) => (
             <CourseCard
               key={course.title}
+              slug={course.slug}
               title={course.title}
               description={course.description}
-              lessons={course.lessons}
-              hours={course.hours}
+              totalLessons={course.totalLessons}
+              totalSeconds={course.totalSeconds}
+              completedLessons={course.completedLessons}
             />
           ))
         )}
