@@ -21,9 +21,11 @@ export function LoginForm() {
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
+    reset,
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
+    mode: "onBlur",
     defaultValues: {
       email: "",
       password: "",
@@ -33,6 +35,7 @@ export function LoginForm() {
   const onSubmit = async (data: LoginSchema) => {
     try {
       await login(data);
+      reset();
       toast.success("Login realizado com sucesso!");
       router.replace("/");
     } catch (error) {
@@ -83,7 +86,7 @@ export function LoginForm() {
             </div>
 
             {/* Submit Button */}
-            <Button className="w-full" disabled={isSubmitting}>
+            <Button className="w-full" disabled={isSubmitting || !isValid}>
               {isSubmitting ? "Entrando..." : "Entrar"}
             </Button>
           </form>
