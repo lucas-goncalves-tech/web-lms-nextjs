@@ -15,12 +15,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (
-      window !== undefined &&
+      typeof window !== "undefined" &&
       error.response?.status === 401 &&
-      window.location.pathname !== "/auth" &&
-      !error.config?.url?.includes("/auth")
+      !window.location.pathname.startsWith("/auth")
     ) {
-      apiClient.delete("/auth/logout");
       window.location.href = "/auth";
     }
     return Promise.reject(error);

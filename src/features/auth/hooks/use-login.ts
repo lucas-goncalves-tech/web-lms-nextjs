@@ -10,8 +10,10 @@ export const useLogin = () => {
       const response = await apiClient.post("/auth", data);
       return response.data;
     },
+    onMutate: () => {
+      queryClient.clear();
+    },
     onSuccess: () => {
-      // Invalida o cache do usuário para forçar refetch
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     },
   });
