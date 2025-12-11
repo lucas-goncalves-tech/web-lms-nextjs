@@ -8,7 +8,7 @@ type Props = {
   courseSlug: string;
 };
 
-function transformSlugToTitle(slug: string): string {
+export function transformSlugToTitle(slug: string): string {
   return slug.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 

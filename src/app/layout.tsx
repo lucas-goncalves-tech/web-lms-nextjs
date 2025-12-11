@@ -36,7 +36,7 @@ export default function RootLayout({
         <Providers>
           <AuthProvider>{children}</AuthProvider>
         </Providers>
-        <Toaster />
+        <Toaster theme="dark" />
       </body>
     </html>
   );
