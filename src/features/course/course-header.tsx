@@ -3,6 +3,8 @@ import { Video, Clock, TrendingUp } from "lucide-react";
 import { useGetLessons } from "./hooks/use-get-lessons";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { formatHoursMinutes } from "@/shared/helpers/format-duration";
+import { useResetCourseProgress } from "./hooks/use-reset-course-progress";
+import { ResetCourseAlert } from "./reset-course-alert";
 
 type Props = {
   courseSlug: string;
@@ -14,6 +16,8 @@ export function transformSlugToTitle(slug: string): string {
 
 export function CourseHeader({ courseSlug }: Props) {
   const { data: lessons, isLoading } = useGetLessons(courseSlug);
+  const { mutate: resetProgress, isPending: isResetting } =
+    useResetCourseProgress(courseSlug);
   const title = transformSlugToTitle(courseSlug);
 
   const totalLessons = lessons?.length ?? 0;
@@ -103,6 +107,16 @@ export function CourseHeader({ courseSlug }: Props) {
             ? "Curso concluído! 🎉"
             : `${completedLessons} de ${totalLessons} aulas concluídas`}
         </p>
+
+        {/* Reset Button - Only visible when course is 100% complete */}
+        {isCompleted && !isLoading && (
+          <div className="flex justify-center mt-4">
+            <ResetCourseAlert
+              handleReset={resetProgress}
+              isResetting={isResetting}
+            />
+          </div>
+        )}
       </div>
     </header>
   );
