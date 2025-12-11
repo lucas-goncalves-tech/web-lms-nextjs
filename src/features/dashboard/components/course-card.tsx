@@ -27,7 +27,7 @@ export function CourseCard({
   totalLessons,
   completedLessons,
 }: CourseCardProps) {
-  const progress = Math.round((completedLessons / totalLessons) * 100);
+  const progress = Math.round((completedLessons / totalLessons) * 100) || 0;
   const isCompleted = progress === 100;
 
   return (

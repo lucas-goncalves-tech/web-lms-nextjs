@@ -2,13 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Award, LogOut, Lock } from "lucide-react";
+import {
+  LayoutDashboard,
+  Award,
+  LogOut,
+  Lock,
+  Shield,
+  Plus,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -42,6 +50,14 @@ export const navItems = [
   },
 ];
 
+const adminNavItems = [
+  {
+    title: "Criar novo curso",
+    href: "/course/create",
+    icon: Plus,
+  },
+];
+
 export function AppSidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
@@ -57,11 +73,21 @@ export function AppSidebar() {
             <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
             <AvatarFallback>HS</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-sidebar-foreground">
+          <div className="flex flex-col gap-1 flex-1 min-w-0">
+            <span className="text-sm font-medium text-sidebar-foreground truncate">
               {user.name}
             </span>
-            <span className="text-xs text-muted-foreground">{user.email}</span>
+            <span className="text-xs text-muted-foreground truncate">
+              {user.email}
+            </span>
+            {user.role === "ADMIN" && (
+              <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-linear-to-r from-primary/20 to-primary/10 border border-primary/30 w-fit">
+                <Shield className="size-2.5 text-primary" />
+                <span className="text-[10px] font-semibold text-primary uppercase tracking-wider">
+                  Admin
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </SidebarHeader>
@@ -87,6 +113,29 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        {user.role === "ADMIN" && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminNavItems.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.href}
+                      tooltip={item.title}
+                    >
+                      <Link href={item.href}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="p-4">

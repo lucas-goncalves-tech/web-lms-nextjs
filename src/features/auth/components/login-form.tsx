@@ -25,7 +25,8 @@ export function LoginForm() {
     reset,
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
-    mode: "onBlur",
+    mode: "all",
+    reValidateMode: "onChange",
     defaultValues: {
       email: "",
       password: "",
