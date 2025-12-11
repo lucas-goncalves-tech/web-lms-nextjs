@@ -8,6 +8,7 @@ import {
   CardFooter,
 } from "@/shared/components/ui/card";
 import Link from "next/link";
+import { formatHoursMinutes } from "@/shared/lib/format-duration";
 
 interface CourseCardProps {
   slug: string;
@@ -28,15 +29,6 @@ export function CourseCard({
 }: CourseCardProps) {
   const progress = Math.round((completedLessons / totalLessons) * 100);
   const isCompleted = progress === 100;
-  function formatDuration(totalSeconds: number): string {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-
-    if (hours > 0) {
-      return minutes > 0 ? `${hours}h ${minutes}min` : `${hours}h`;
-    }
-    return `${minutes}min`;
-  }
 
   return (
     <Link href={`/course/${slug}`}>
@@ -64,7 +56,7 @@ export function CourseCard({
             </span>
             <span className="flex items-center gap-1.5">
               <Clock size={14} />
-              {formatDuration(totalSeconds)}
+              {formatHoursMinutes(totalSeconds)}
             </span>
           </div>
         </CardContent>

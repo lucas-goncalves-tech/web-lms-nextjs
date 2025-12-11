@@ -6,15 +6,6 @@ import { CourseCardSkeleton } from "./course-card-skeleton";
 export function CourseGrid() {
   const { data: courses, isLoading, error } = useGetCourses();
 
-  if (isLoading)
-    return (
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <CourseCardSkeleton key={index} />
-        ))}
-      </div>
-    );
-
   if (error)
     return <p className="text-center text-red-500">Erro ao carregar cursos</p>;
 
@@ -24,7 +15,13 @@ export function CourseGrid() {
         Meus Cursos
       </h3>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {courses?.length === 0 ? (
+        {isLoading ? (
+          <>
+            <CourseCardSkeleton />
+            <CourseCardSkeleton />
+            <CourseCardSkeleton />
+          </>
+        ) : courses?.length === 0 ? (
           <p className="text-center text-muted-foreground">
             Nenhum curso encontrado.
           </p>
