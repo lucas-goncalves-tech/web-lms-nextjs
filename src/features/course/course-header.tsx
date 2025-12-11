@@ -2,7 +2,7 @@
 import { Video, Clock, TrendingUp } from "lucide-react";
 import { useGetLessons } from "./hooks/use-get-lessons";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { formatHoursMinutes } from "@/shared/lib/format-duration";
+import { formatHoursMinutes } from "@/shared/helpers/format-duration";
 
 type Props = {
   courseSlug: string;

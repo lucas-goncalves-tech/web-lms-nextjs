@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/shared/components/ui/card";
 import Link from "next/link";
-import { formatHoursMinutes } from "@/shared/lib/format-duration";
+import { formatHoursMinutes } from "@/shared/helpers/format-duration";
 
 interface CourseCardProps {
   slug: string;

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Circle, CheckCircle2, Clock } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { formatMinutesSeconds } from "@/shared/lib/format-duration";
+import { formatMinutesSeconds } from "@/shared/helpers/format-duration";
 
 interface LessonItemProps {
   courseSlug: string;
