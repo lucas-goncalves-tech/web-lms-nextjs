@@ -14,10 +14,18 @@ export function TableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[180px]">Slug</TableHead>
-            <TableHead className="w-[200px]">Título</TableHead>
-            <TableHead>Descrição</TableHead>
-            <TableHead className="w-[80px] text-center">Ações</TableHead>
+            <TableHead className="w-[180px]">
+              <Skeleton className="h-6" />
+            </TableHead>
+            <TableHead className="w-[200px]">
+              <Skeleton className="h-6" />
+            </TableHead>
+            <TableHead>
+              <Skeleton className="h-6" />
+            </TableHead>
+            <TableHead className="w-[80px] text-center">
+              <Skeleton className="h-6" />
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

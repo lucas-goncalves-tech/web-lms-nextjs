@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/lib/api/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { adminQueryKeys } from "./query-keys";
 
 type UpdateCourseData = {
   title: string;
@@ -17,15 +18,15 @@ export function useUpdateCourse() {
       courseSlug: string;
       data: UpdateCourseData;
     }) => {
-      await apiClient.put(`/admin/courses/${courseSlug}`, data);
+      await apiClient.put(`/admin/courses/${courseSlug}/update`, data);
     },
     onSuccess: () => {
       toast.success("Curso atualizado com sucesso");
       queryClient.invalidateQueries({
-        queryKey: ["courses"],
+        queryKey: adminQueryKeys.courses.all(),
       });
       queryClient.invalidateQueries({
-        queryKey: ["courses-table"],
+        queryKey: adminQueryKeys.courses.table(),
       });
     },
     onError: () => {

@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/lib/api/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { adminQueryKeys } from "./query-keys";
 
 export function useDeleteCourse() {
   const queryClient = useQueryClient();
@@ -11,10 +12,10 @@ export function useDeleteCourse() {
     onSuccess: () => {
       toast.success("Curso deletado com sucesso");
       queryClient.invalidateQueries({
-        queryKey: ["courses"],
+        queryKey: adminQueryKeys.courses.all(),
       });
       queryClient.invalidateQueries({
-        queryKey: ["courses-table"],
+        queryKey: adminQueryKeys.courses.table(),
       });
     },
     onError: () => {

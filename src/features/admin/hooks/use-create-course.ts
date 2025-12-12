@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/client";
 import { CreateCourse } from "../schemas/create-course";
+import { adminQueryKeys } from "./query-keys";
 
 export function useCreateCourse() {
   const queryClient = useQueryClient();
@@ -10,7 +11,10 @@ export function useCreateCourse() {
       await apiClient.post("/admin/courses", data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({
+        queryKey: adminQueryKeys.courses.table(),
+      });
+      queryClient.invalidateQueries({ queryKey: adminQueryKeys.courses.all() });
     },
   });
 }
