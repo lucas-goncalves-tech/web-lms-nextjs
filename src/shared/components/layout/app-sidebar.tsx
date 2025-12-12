@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
   Award,
   LogOut,
   Lock,
   Shield,
   Plus,
+  BookOpen,
+  Users,
 } from "lucide-react";
 import {
   Sidebar,
@@ -34,9 +35,9 @@ import { SidebarSkeleton } from "./sidebar-loading";
 
 export const navItems = [
   {
-    title: "Dashboard",
+    title: "Meus cursos",
     href: "/",
-    icon: LayoutDashboard,
+    icon: BookOpen,
   },
   {
     title: "Meus Certificados",
@@ -53,8 +54,13 @@ export const navItems = [
 const adminNavItems = [
   {
     title: "Criar novo curso",
-    href: "/course/create",
+    href: "/admin/course-create",
     icon: Plus,
+  },
+  {
+    title: "Usuários",
+    href: "/admin/users",
+    icon: Users,
   },
 ];
 

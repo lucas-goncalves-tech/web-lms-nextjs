@@ -17,18 +17,18 @@ import {
 } from "@/shared/components/ui/card";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { getErrorMessage } from "@/shared/lib/api/errors";
-import { CreateCourse, createCourseSchema } from "./schemas/create-course";
 import { useCreateCourse } from "./hooks/use-create-course";
+import { CreateCourse, createCourseSchema } from "./schemas/create-course";
 
 const generateSlug = (title: string): string => {
   return title
-    .toLowerCase() // Converte para minúsculas
-    .normalize("NFD") // Normaliza caracteres acentuados
-    .replace(/[\u0300-\u036f]/g, "") // Remove acentos
-    .replace(/[^\w\s-]/g, "") // Remove caracteres especiais
-    .replace(/\s+/g, "-") // Substitui espaços por hífens
-    .replace(/-+/g, "-") // Remove hífens duplicados
-    .replace(/^-+|-+$/g, ""); // Remove hífens do início e fim
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
 };
 
 export function CreateCourseForm() {

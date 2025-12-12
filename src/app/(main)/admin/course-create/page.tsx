@@ -1,4 +1,4 @@
-import { CreateCourseForm } from "@/features/course/create-course-form";
+import { CreateCourseForm } from "@/features/admin/create-course-form";
 
 export default function CourseCreatePage() {
   return (

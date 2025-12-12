@@ -7,7 +7,7 @@ export function useCreateCourse() {
 
   return useMutation({
     mutationFn: async (data: CreateCourse) => {
-      await apiClient.post("/courses", data);
+      await apiClient.post("/admin/courses", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });

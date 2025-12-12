@@ -1,4 +1,4 @@
-import { WelcomeBanner, ContinueCard, CourseGrid } from "@/features/dashboard";
+import { WelcomeBanner, ContinueCard, CourseGrid } from "@/features/my-courses";
 
 export default function DashboardPage() {
   return (
