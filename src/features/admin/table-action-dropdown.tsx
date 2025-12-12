@@ -1,23 +1,26 @@
+"use client";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
 import { CourseForm } from "./schemas/course-form";
 import { Button } from "@/shared/components/ui/button";
-import { MoreHorizontal, Pencil } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { CourseDeleteAlert } from "./course-delete-alert";
+import { CourseFormDialog } from "./course-form-dialog";
+import { useState } from "react";
 
 type Props = {
   course: CourseForm;
-  onEdit: (course: CourseForm) => void;
-  onDelete: (course: CourseForm) => void;
 };
 
-export function CourseActionsDropdown({ course, onEdit, onDelete }: Props) {
+export function CourseActionsDropdown({ course }: Props) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon-sm">
           <MoreHorizontal className="size-4" />
@@ -25,11 +28,14 @@ export function CourseActionsDropdown({ course, onEdit, onDelete }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onEdit(course)}>
-          <Pencil className="size-4" />
-          Editar
-        </DropdownMenuItem>
-        <CourseDeleteAlert course={course} handleDeleteConfirm={onDelete} />
+        <CourseFormDialog
+          course={course}
+          onDropdownClose={() => setOpen(false)}
+        />
+        <CourseDeleteAlert
+          course={course}
+          onDropdownClose={() => setOpen(false)}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

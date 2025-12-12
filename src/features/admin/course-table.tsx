@@ -1,7 +1,6 @@
 "use client";
 
 import { useGetCoursesTable } from "./hooks/use-get-courses-table";
-import { CourseForm } from "./schemas/course-form";
 import {
   Table,
   TableBody,
@@ -14,11 +13,10 @@ import { Card, CardContent } from "@/shared/components/ui/card";
 import { CourseActionsDropdown } from "./table-action-dropdown";
 import { TableSkeleton } from "./table-skeleton";
 import { MobileCardSkeleton } from "./mobile-card-skeleton";
-import { useDeleteCourse } from "./hooks/use-delete-course";
+import { CourseFormDialog } from "./course-form-dialog";
 
 export function CourseTable() {
   const { data: courses, isLoading, isError } = useGetCoursesTable();
-  const { mutateAsync: deleteCourse } = useDeleteCourse();
 
   if (isLoading) {
     return (
@@ -45,17 +43,12 @@ export function CourseTable() {
     );
   }
 
-  const handleEdit = (course: CourseForm) => {
-    // TODO: Implement edit dialog
-    console.log("Edit course:", course);
-  };
-
-  const handleDeleteConfirm = async (course: CourseForm) => {
-    await deleteCourse(course.slug);
-  };
-
   return (
-    <>
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <CourseFormDialog />
+      </div>
+
       {/* Mobile View - Cards */}
       <div className="block md:hidden space-y-3">
         {courses.map((course) => (
@@ -72,11 +65,7 @@ export function CourseTable() {
                   {course.description}
                 </p>
               </div>
-              <CourseActionsDropdown
-                course={course}
-                onEdit={handleEdit}
-                onDelete={handleDeleteConfirm}
-              />
+              <CourseActionsDropdown course={course} />
             </CardContent>
           </Card>
         ))}
@@ -104,17 +93,13 @@ export function CourseTable() {
                   {course.description}
                 </TableCell>
                 <TableCell className="text-center">
-                  <CourseActionsDropdown
-                    course={course}
-                    onEdit={handleEdit}
-                    onDelete={handleDeleteConfirm}
-                  />
+                  <CourseActionsDropdown course={course} />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }

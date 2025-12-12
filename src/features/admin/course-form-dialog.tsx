@@ -2,23 +2,32 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { BookOpen, Hash } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/ui/form-error";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { getErrorMessage } from "@/shared/lib/api/errors";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/components/ui/dialog";
+import { DropdownMenuItem } from "@/shared/components/ui/dropdown-menu";
+import { Pencil } from "lucide-react";
 import { useCreateCourse } from "./hooks/use-create-course";
+import { useUpdateCourse } from "./hooks/use-update-course";
 import { CreateCourse, createCourseSchema } from "./schemas/create-course";
+import { CourseForm } from "./schemas/course-form";
+import { useState } from "react";
+
+type Props = {
+  course?: CourseForm;
+  onDropdownClose?: () => void;
+};
 
 const generateSlug = (title: string): string => {
   return title
@@ -31,28 +40,39 @@ const generateSlug = (title: string): string => {
     .replace(/^-+|-+$/g, "");
 };
 
-export function CreateCourseForm() {
-  const router = useRouter();
+export function CourseFormDialog({ course, onDropdownClose }: Props) {
+  const [open, setOpen] = useState(false);
+  const isEditMode = !!course;
+
   const { mutateAsync: createCourse } = useCreateCourse();
+  const { mutateAsync: updateCourse } = useUpdateCourse();
 
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting, isValid, isDirty },
     reset,
     setValue,
   } = useForm<CreateCourse>({
     resolver: zodResolver(createCourseSchema),
     mode: "all",
     reValidateMode: "onChange",
-    defaultValues: {
-      slug: "",
-      title: "",
-      description: "",
-    },
+    defaultValues: isEditMode
+      ? {
+          slug: course.slug,
+          title: course.title,
+          description: course.description,
+        }
+      : {
+          slug: "",
+          title: "",
+          description: "",
+        },
   });
 
   const handleTitleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (isEditMode) return; // Don't auto-generate slug in edit mode
+
     const title = e.target.value;
     if (title) {
       const slug = generateSlug(title);
@@ -62,32 +82,50 @@ export function CreateCourseForm() {
 
   const onSubmit = async (data: CreateCourse) => {
     try {
-      await createCourse(data);
-      toast.success("Curso criado com sucesso!");
+      if (isEditMode) {
+        await updateCourse({
+          courseSlug: course.slug,
+          data: {
+            title: data.title,
+            description: data.description,
+          },
+        });
+      } else {
+        await createCourse(data);
+      }
+      setOpen(false);
+      onDropdownClose?.();
       reset();
     } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
+      // Error handling is done in the hooks
+      console.error(error);
     }
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 items-center justify-center rounded-full bg-primary/20 hidden md:flex">
-            <BookOpen className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <CardTitle>Novo Curso</CardTitle>
-            <CardDescription>
-              Preencha as informações básicas do curso
-            </CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        {isEditMode ? (
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <Pencil className="size-4" />
+            Editar
+          </DropdownMenuItem>
+        ) : (
+          <Button>Novo Curso</Button>
+        )}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[525px]">
+        <DialogHeader>
+          <DialogTitle>
+            {isEditMode ? "Editar Curso" : "Criar Novo Curso"}
+          </DialogTitle>
+          <DialogDescription>
+            {isEditMode
+              ? "Atualize as informações do curso"
+              : "Preencha as informações básicas do curso"}
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Title Field */}
           <div>
             <Input
@@ -114,7 +152,7 @@ export function CreateCourseForm() {
             <Textarea
               id="description"
               placeholder="Descrição completa do curso..."
-              rows={5}
+              rows={4}
               {...register("description")}
             />
             <FormError error={errors.description} />
@@ -128,34 +166,40 @@ export function CreateCourseForm() {
               label="Slug"
               placeholder="javascript-completo"
               icon={Hash}
+              disabled={isEditMode}
               {...register("slug")}
             />
             <p className="text-xs text-muted-foreground mt-1">
-              SLUG amigável (apenas letras minúsculas, números e hífens)
+              {isEditMode
+                ? "O slug não pode ser alterado"
+                : "URL amigável (apenas letras minúsculas, números e hífens)"}
             </p>
             <FormError error={errors.slug} />
           </div>
 
-          {/* Submit Button */}
-          <div className="flex gap-3">
+          <DialogFooter>
             <Button
               type="button"
               variant="outline"
-              className="flex-1"
-              onClick={() => router.push("/")}
+              onClick={() => setOpen(false)}
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className="flex-1"
-              disabled={isSubmitting || !isValid}
+              disabled={isSubmitting || (isEditMode ? !isDirty : !isValid)}
             >
-              {isSubmitting ? "Criando..." : "Criar Curso"}
+              {isSubmitting
+                ? isEditMode
+                  ? "Salvando..."
+                  : "Criando..."
+                : isEditMode
+                ? "Salvar"
+                : "Criar Curso"}
             </Button>
-          </div>
+          </DialogFooter>
         </form>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

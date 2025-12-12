@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AlertDialog,
   AlertDialogContent,
@@ -12,15 +14,29 @@ import {
 import { DropdownMenuItem } from "@/shared/components/ui/dropdown-menu";
 import { CourseForm } from "./schemas/course-form";
 import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useDeleteCourse } from "./hooks/use-delete-course";
 
 type Props = {
   course: CourseForm;
-  handleDeleteConfirm: (course: CourseForm) => void;
+  onDropdownClose: () => void;
 };
 
-export function CourseDeleteAlert({ course, handleDeleteConfirm }: Props) {
+export function CourseDeleteAlert({ course, onDropdownClose }: Props) {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const { mutate: deleteCourse, isPending } = useDeleteCourse();
+
+  const handleDeleteConfirm = async () => {
+    deleteCourse(course.slug, {
+      onSuccess: () => {
+        setDeleteOpen(false);
+        onDropdownClose();
+      },
+    });
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
       <AlertDialogTrigger asChild>
         <DropdownMenuItem
           variant="destructive"
@@ -42,9 +58,9 @@ export function CourseDeleteAlert({ course, handleDeleteConfirm }: Props) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleDeleteConfirm(course)}>
-            Excluir
+          <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDeleteConfirm} disabled={isPending}>
+            {isPending ? "Excluindo..." : "Excluir"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
