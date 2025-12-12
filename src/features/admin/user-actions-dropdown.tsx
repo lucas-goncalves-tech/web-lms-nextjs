@@ -7,10 +7,11 @@ import {
   DropdownMenuItem,
 } from "@/shared/components/ui/dropdown-menu";
 import { Button } from "@/shared/components/ui/button";
-import { MoreHorizontal, Pencil, Power } from "lucide-react";
+import { MoreHorizontal, Power } from "lucide-react";
 import { useState } from "react";
 import { UserForm } from "./user-table";
 import { useToggleStatus } from "./hooks/use-toggle-status";
+import { UserEditFormDialog } from "./user-edit-form-dialog";
 
 type Props = {
   user: UserForm;
@@ -19,12 +20,6 @@ type Props = {
 export function UserActionsDropdown({ user }: Props) {
   const { mutateAsync: toggleStatus } = useToggleStatus();
   const [open, setOpen] = useState(false);
-
-  // TODO: Implementar handlers reais
-  const handleEdit = () => {
-    console.log("Edit user:", user.id);
-    setOpen(false);
-  };
 
   const handleToggleStatus = async () => {
     await toggleStatus(user.id);
@@ -40,10 +35,7 @@ export function UserActionsDropdown({ user }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={handleEdit}>
-          <Pencil className="size-4" />
-          Editar
-        </DropdownMenuItem>
+        <UserEditFormDialog user={user} dropdownClose={() => setOpen(false)} />
         <DropdownMenuItem onClick={handleToggleStatus}>
           <Power className="size-4" />
           {user.isActive ? "Desativar" : "Ativar"}

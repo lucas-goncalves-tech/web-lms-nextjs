@@ -80,6 +80,12 @@ export function CourseFormDialog({ course, onDropdownClose }: Props) {
     }
   };
 
+  const handleCancel = () => {
+    setOpen(false);
+    onDropdownClose?.();
+    reset();
+  };
+
   const onSubmit = async (data: CreateCourse) => {
     try {
       if (isEditMode) {
@@ -178,11 +184,7 @@ export function CourseFormDialog({ course, onDropdownClose }: Props) {
           </div>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
+            <Button type="button" variant="outline" onClick={handleCancel}>
               Cancelar
             </Button>
             <Button

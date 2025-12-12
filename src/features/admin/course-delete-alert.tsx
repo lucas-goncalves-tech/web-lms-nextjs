@@ -35,6 +35,11 @@ export function CourseDeleteAlert({ course, onDropdownClose }: Props) {
     });
   };
 
+  const handleCancel = () => {
+    setDeleteOpen(false);
+    onDropdownClose();
+  };
+
   return (
     <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
       <AlertDialogTrigger asChild>
@@ -58,7 +63,9 @@ export function CourseDeleteAlert({ course, onDropdownClose }: Props) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel onClick={handleCancel} disabled={isPending}>
+            Cancelar
+          </AlertDialogCancel>
           <AlertDialogAction onClick={handleDeleteConfirm} disabled={isPending}>
             {isPending ? "Excluindo..." : "Excluir"}
           </AlertDialogAction>
