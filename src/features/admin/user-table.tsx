@@ -11,10 +11,10 @@ import {
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { TableSkeleton } from "./table-skeleton";
 import { MobileCardSkeleton } from "./mobile-card-skeleton";
-import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
 import { UserActionsDropdown } from "./user-actions-dropdown";
 import { useGetUsersTable } from "./hooks/use-get-users-table";
+import { UserCreateFormDialog } from "./user-create-form-dialog";
 
 export type UserForm = {
   id: string;
@@ -55,8 +55,7 @@ export function UserTable() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        {/* TODO: Substituir por UserFormDialog */}
-        <Button>Novo Usuário</Button>
+        <UserCreateFormDialog />
       </div>
 
       {/* Mobile View - Cards */}
