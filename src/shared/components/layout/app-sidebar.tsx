@@ -7,9 +7,9 @@ import {
   LogOut,
   Lock,
   Shield,
-  Plus,
   BookOpen,
   Users,
+  BookA,
 } from "lucide-react";
 import {
   Sidebar,
@@ -53,9 +53,9 @@ export const navItems = [
 
 const adminNavItems = [
   {
-    title: "Criar novo curso",
-    href: "/admin/course-create",
-    icon: Plus,
+    title: "Cursos",
+    href: "/admin/courses",
+    icon: BookA,
   },
   {
     title: "Usuários",

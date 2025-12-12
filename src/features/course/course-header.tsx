@@ -5,6 +5,7 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { formatHoursMinutes } from "@/shared/helpers/format-duration";
 import { useResetCourseProgress } from "./hooks/use-reset-course-progress";
 import { ResetCourseAlert } from "./reset-course-alert";
+import { PageHeader } from "@/shared/components/ui/page-header";
 
 type Props = {
   courseSlug: string;
@@ -30,9 +31,7 @@ export function CourseHeader({ courseSlug }: Props) {
   return (
     <header className="w-full mb-8">
       {/* Title */}
-      <h1 className="text-2xl md:text-3xl font-bold text-center text-foreground tracking-tight mb-6">
-        {title}
-      </h1>
+      <PageHeader title={title} />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto mb-6">

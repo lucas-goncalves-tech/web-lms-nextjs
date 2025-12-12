@@ -23,7 +23,7 @@ export function LessonsList({ courseSlug }: Props) {
     );
 
   return (
-    <div className="rounded-xl bg-background/50 backdrop-blur-sm border border-border/40 overflow-hidden">
+    <div className="rounded-sm bg-background/50 backdrop-blur-sm border border-border/40 overflow-hidden">
       {lessons?.map((lesson, index) => (
         <LessonItem
           key={lesson.id}

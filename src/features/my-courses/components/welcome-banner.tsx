@@ -1,18 +1,10 @@
 "use client";
 
 import { useAuth } from "@/shared/context/auth";
+import { PageHeader } from "@/shared/components/ui/page-header";
 
 export function WelcomeBanner() {
   const { user } = useAuth();
-  return (
-    <div className="flex flex-col gap-2 text-center">
-      <h1 className="text-4xl font-black tracking-tight text-foreground">
-        Meus Cursos
-      </h1>
-      <p className="text-base text-muted-foreground">
-        Bem-vinda de volta,{" "}
-        <span className="font-bold capitalize">{user?.name}</span>!
-      </p>
-    </div>
-  );
+  const subtitle = `Bem-vinda de volta, ${user?.name}!`;
+  return <PageHeader title="Meus Cursos" subtitle={subtitle} />;
 }

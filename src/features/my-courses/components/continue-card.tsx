@@ -50,7 +50,7 @@ export function ContinueCard({
                 {hours}h
               </span>
             </div>
-            <button className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors">
+            <button className="flex items-center gap-2 rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors">
               <Play size={16} />
               Continuar
             </button>
