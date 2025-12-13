@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/client";
 import { CreateCourse } from "../schemas/create-course";
 import { adminQueryKeys } from "./query-keys";
+import { myCoursesKeys } from "@/features/my-courses/hooks/query-keys";
 
 export function useCreateCourse() {
   const queryClient = useQueryClient();
@@ -13,6 +14,9 @@ export function useCreateCourse() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: adminQueryKeys.courses.all(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: myCoursesKeys.courses.all(),
       });
     },
   });
