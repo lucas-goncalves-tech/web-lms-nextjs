@@ -17,6 +17,7 @@ import { DropdownMenuItem } from "@/shared/components/ui/dropdown-menu";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { LessonTable } from "./schemas/lessons";
+import { InputFile } from "@/shared/components/ui/input-file";
 
 type Props = {
   lesson?: LessonTable;
@@ -100,10 +101,9 @@ export function LessonFormDialog({
 
           {/* Video Field */}
           <div>
-            <Input
+            <InputFile
               id="video"
-              type="text"
-              label="ID do Vídeo (YouTube)"
+              label="Arquivo do video"
               placeholder="dQw4w9WgXcQ"
               icon={Video}
               defaultValue={lesson?.video}

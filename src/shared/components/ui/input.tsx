@@ -33,12 +33,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div
           className={cn(
-            "flex h-12 w-full items-center gap-3 overflow-hidden rounded-sm border border-input bg-background/50 px-4 text-base text-foreground focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/50",
+            "group flex h-12 w-full items-center gap-3 overflow-hidden rounded-sm border border-input bg-background/50 px-4 text-base text-foreground transition-all duration-200",
+            "hover:border-primary/50 hover:bg-background/70",
+            "focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/50",
             className
           )}
         >
           {hasLeftIcon && IconComponent && (
-            <div className="pointer-events-none text-muted-foreground">
+            <div className="pointer-events-none text-muted-foreground transition-colors group-hover:text-primary">
               <IconComponent size={20} />
             </div>
           )}
