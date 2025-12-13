@@ -2,10 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/client";
 import { Lesson } from "../schemas/lesson";
 import { toast } from "sonner";
+import { courseKeys } from "./query-keys";
 
 export function useResetCourseProgress(courseSlug: string) {
   const queryClient = useQueryClient();
-  const queryKey = ["lessons", courseSlug];
+  const queryKey = courseKeys.lessons.getLessons(courseSlug);
 
   return useMutation({
     mutationFn: async () => {

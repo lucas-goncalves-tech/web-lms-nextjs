@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/shared/lib/api/errors";
 import { adminQueryKeys } from "./query-keys";
 
-export function useEditUser() {
+export function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (user: UserEditForm) => {
@@ -18,7 +18,7 @@ export function useEditUser() {
     onSuccess: () => {
       toast.success("Usuário editado com sucesso!");
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.users.table(),
+        queryKey: adminQueryKeys.users.all(),
       });
     },
     onError: (error) => {

@@ -14,9 +14,6 @@ export function useDeleteCourse() {
       queryClient.invalidateQueries({
         queryKey: adminQueryKeys.courses.all(),
       });
-      queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.courses.table(),
-      });
     },
     onError: () => {
       toast.error("Erro ao deletar curso");

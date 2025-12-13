@@ -7,7 +7,7 @@ type Props = {
 
 export function PageHeader({ title, subtitle }: Props) {
   return (
-    <div className="text-center flex justify-center mb-6">
+    <div className="text-center flex flex-col justify-center mb-6">
       <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
         {title ? title : <Skeleton className="w-46 h-6" />}
       </h1>

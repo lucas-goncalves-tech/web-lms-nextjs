@@ -13,7 +13,7 @@ export function useDeleteUser() {
     onSuccess: () => {
       toast.success("Usuário deletado com sucesso");
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.users.table(),
+        queryKey: adminQueryKeys.users.all(),
       });
     },
     onError: (error) => {

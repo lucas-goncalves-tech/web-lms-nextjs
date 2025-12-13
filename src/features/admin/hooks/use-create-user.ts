@@ -14,7 +14,7 @@ export function useCreateUser() {
     onSuccess: () => {
       toast.success("Usuário criado com sucesso!");
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.users.table(),
+        queryKey: adminQueryKeys.users.all(),
       });
     },
     onError: (error) => {

@@ -2,6 +2,7 @@ import { apiClient } from "@/shared/lib/api/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminQueryKeys } from "./query-keys";
+import { myCoursesKeys } from "@/features/my-courses/hooks/query-keys";
 
 type UpdateCourseData = {
   title: string;
@@ -26,7 +27,7 @@ export function useUpdateCourse() {
         queryKey: adminQueryKeys.courses.all(),
       });
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.courses.table(),
+        queryKey: myCoursesKeys.courses.all(),
       });
     },
     onError: () => {

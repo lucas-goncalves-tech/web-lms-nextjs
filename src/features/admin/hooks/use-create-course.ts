@@ -12,9 +12,8 @@ export function useCreateCourse() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.courses.table(),
+        queryKey: adminQueryKeys.courses.all(),
       });
-      queryClient.invalidateQueries({ queryKey: adminQueryKeys.courses.all() });
     },
   });
 }

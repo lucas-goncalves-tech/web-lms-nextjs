@@ -19,7 +19,7 @@ import { DropdownMenuItem } from "@/shared/components/ui/dropdown-menu";
 import { useForm, Controller } from "react-hook-form";
 import { UserEditForm, userEditSchema } from "./schemas/user-edit";
 import { UserForm } from "./user-table";
-import { useEditUser } from "./hooks/use-edit-user";
+import { useUpdateUser } from "./hooks/use-update-user";
 import { useState } from "react";
 
 type Props = {
@@ -29,7 +29,7 @@ type Props = {
 
 export function UserEditFormDialog({ user, dropdownClose }: Props) {
   const [open, setOpen] = useState(false);
-  const { mutateAsync: editUser, isPending } = useEditUser();
+  const { mutateAsync: editUser, isPending } = useUpdateUser();
   const {
     register,
     handleSubmit,

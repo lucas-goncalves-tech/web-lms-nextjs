@@ -2,10 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/client";
 import { UniqueLesson } from "../schema/unique-lesson";
 import { toast } from "sonner";
+import { lessonKeys } from "./query-keys";
 
 export function useCompleteLesson(courseSlug: string, lessonSlug: string) {
   const queryClient = useQueryClient();
-  const queryKey = ["unique-lesson", courseSlug, lessonSlug];
+  const queryKey = lessonKeys.lesson.uniqueWithCourse(courseSlug, lessonSlug);
 
   return useMutation({
     mutationFn: async () => {
