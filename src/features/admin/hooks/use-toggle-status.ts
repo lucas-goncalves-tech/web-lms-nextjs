@@ -11,7 +11,7 @@ export function useToggleStatus() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (userId: string) => {
-      const res = await apiClient.patch(`/admin/users/${userId}/toggle-status`);
+      const res = await apiClient.patch(`/admin/users/${userId}/toggle-active`);
       return messageSchema.parse(res.data);
     },
     onError: (error) => {

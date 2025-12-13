@@ -4,27 +4,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  DropdownMenuItem,
 } from "@/shared/components/ui/dropdown-menu";
 import { Button } from "@/shared/components/ui/button";
-import { MoreHorizontal, Power } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { UserForm } from "./user-table";
-import { useToggleStatus } from "./hooks/use-toggle-status";
 import { UserEditFormDialog } from "./user-edit-form-dialog";
+import { UserToggleStatusAlert } from "./user-toggle-status-alert";
+import { UserDeleteAlert } from "./user-delete-alert";
 
 type Props = {
   user: UserForm;
 };
 
 export function UserActionsDropdown({ user }: Props) {
-  const { mutateAsync: toggleStatus } = useToggleStatus();
   const [open, setOpen] = useState(false);
-
-  const handleToggleStatus = async () => {
-    await toggleStatus(user.id);
-    setOpen(false);
-  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -36,10 +30,11 @@ export function UserActionsDropdown({ user }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <UserEditFormDialog user={user} dropdownClose={() => setOpen(false)} />
-        <DropdownMenuItem onClick={handleToggleStatus}>
-          <Power className="size-4" />
-          {user.isActive ? "Desativar" : "Ativar"}
-        </DropdownMenuItem>
+        <UserToggleStatusAlert
+          onDropdownClose={() => setOpen(false)}
+          user={user}
+        />
+        <UserDeleteAlert onDropdownClose={() => setOpen(false)} user={user} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
