@@ -5,18 +5,19 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { CourseForm } from "./schemas/course-form";
 import { Button } from "@/shared/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { CourseDeleteAlert } from "./course-delete-alert";
-import { CourseFormDialog } from "./course-form-dialog";
+import { LessonDeleteAlert } from "./lesson-delete-alert";
 import { useState } from "react";
+import { LessonTable } from "./schemas/lessons";
+import { LessonFormDialog } from "./lesson-form-dialog";
 
 type Props = {
-  course: CourseForm;
+  lesson: LessonTable;
+  courseSlug: string;
 };
 
-export function CourseActionsDropdown({ course }: Props) {
+export function LessonActionsDropdown({ lesson, courseSlug }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -28,12 +29,14 @@ export function CourseActionsDropdown({ course }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <CourseFormDialog
-          course={course}
+        <LessonFormDialog
+          lesson={lesson}
+          courseSlug={courseSlug}
           onDropdownClose={() => setOpen(false)}
         />
-        <CourseDeleteAlert
-          course={course}
+        <LessonDeleteAlert
+          lesson={lesson}
+          courseSlug={courseSlug}
           onDropdownClose={() => setOpen(false)}
         />
       </DropdownMenuContent>

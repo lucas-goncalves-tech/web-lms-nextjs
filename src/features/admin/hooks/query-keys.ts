@@ -1,8 +1,5 @@
 export const adminQueryKeys = {
-  courses: {
-    all: () => ["admin-courses-table"] as const,
-  },
-  users: {
-    all: () => ["admin-users-table"] as const,
-  },
+  getAllCourses: () => ["admin-courses-table"] as const,
+  getAllUsers: () => ["admin-users-table"] as const,
+  getAllLessons: () => ["admin-lessons-table"] as const,
 } as const;

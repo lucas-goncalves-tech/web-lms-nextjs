@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import { CourseActionsDropdown } from "./table-action-dropdown";
+import { CourseActionsDropdown } from "./course-action-dropdown";
 import { TableSkeleton } from "./table-skeleton";
 import { MobileCardSkeleton } from "./mobile-card-skeleton";
 import { CourseFormDialog } from "./course-form-dialog";
