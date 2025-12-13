@@ -5,7 +5,7 @@ import { lessonKeys } from "./query-keys";
 
 export function useGetUniqueLesson(courseSlug: string, lessonSlug: string) {
   return useQuery({
-    queryKey: lessonKeys.lesson.uniqueWithCourse(courseSlug, lessonSlug),
+    queryKey: lessonKeys.getUniqueWithCourse(courseSlug, lessonSlug),
     queryFn: async () => {
       const response = await apiClient.get(
         `/lessons/${courseSlug}/${lessonSlug}`

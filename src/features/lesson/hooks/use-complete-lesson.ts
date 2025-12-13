@@ -6,7 +6,7 @@ import { lessonKeys } from "./query-keys";
 
 export function useCompleteLesson(courseSlug: string, lessonSlug: string) {
   const queryClient = useQueryClient();
-  const queryKey = lessonKeys.lesson.uniqueWithCourse(courseSlug, lessonSlug);
+  const queryKey = lessonKeys.getUniqueWithCourse(courseSlug, lessonSlug);
 
   return useMutation({
     mutationFn: async () => {

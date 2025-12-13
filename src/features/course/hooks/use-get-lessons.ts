@@ -5,7 +5,7 @@ import { courseKeys } from "./query-keys";
 
 export function useGetLessons(courseSlug: string) {
   return useQuery({
-    queryKey: courseKeys.lessons.getLessons(courseSlug),
+    queryKey: courseKeys.getAllLessons(courseSlug),
     queryFn: async () => {
       const response = await apiClient.get(`/lessons/${courseSlug}`);
       return lessonsSchema.parse(response.data);
