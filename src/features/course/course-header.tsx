@@ -1,12 +1,12 @@
 "use client";
 import { Video, Clock, TrendingUp } from "lucide-react";
 import { useGetLessons } from "./hooks/use-get-lessons";
+import { useGetCourse } from "./hooks/use-get-course";
 import { formatHoursMinutes } from "@/shared/helpers/format-duration";
 import { useResetCourseProgress } from "./hooks/use-reset-course-progress";
 import { ResetCourseAlert } from "./reset-course-alert";
 import { PageHeader } from "@/shared/components/ui/page-header";
 import { ProgressBar } from "@/shared/components/ui/progress-bar";
-import { transformSlugToTitle } from "@/shared/helpers/transform-slug-title";
 import { StatCard } from "./stat-card";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
@@ -15,14 +15,14 @@ type Props = {
 };
 
 export function CourseHeader({ courseSlug }: Props) {
+  const { data: course } = useGetCourse(courseSlug);
   const { data: lessons, isLoading } = useGetLessons(courseSlug);
   const { mutate: resetProgress, isPending: isResetting } =
     useResetCourseProgress(courseSlug);
-  const title = transformSlugToTitle(courseSlug);
 
-  const totalLessons = lessons?.length ?? 0;
+  const totalLessons = course?.totalLessons ?? 0;
   const completedLessons = lessons?.filter((l) => l.completed).length ?? 0;
-  const totalSeconds = lessons?.reduce((acc, l) => acc + l.seconds, 0) ?? 0;
+  const totalSeconds = course?.totalSeconds ?? 0;
   const progress =
     totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
   const isCompleted = progress === 100;
@@ -51,7 +51,7 @@ export function CourseHeader({ courseSlug }: Props) {
   return (
     <header className="w-full mb-8">
       {/* Title */}
-      <PageHeader title={title} />
+      <PageHeader title={course?.title} />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto mb-6">

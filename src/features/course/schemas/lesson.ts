@@ -9,7 +9,6 @@ export const lessonSchema = z.object({
   video: z.string(),
   description: z.string(),
   order: z.number(),
-  free: z.number(),
   created: z.string(),
   completed: z.string().nullable(),
 });
