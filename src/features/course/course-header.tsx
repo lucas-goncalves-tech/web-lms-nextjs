@@ -1,19 +1,18 @@
 "use client";
 import { Video, Clock, TrendingUp } from "lucide-react";
 import { useGetLessons } from "./hooks/use-get-lessons";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { formatHoursMinutes } from "@/shared/helpers/format-duration";
 import { useResetCourseProgress } from "./hooks/use-reset-course-progress";
 import { ResetCourseAlert } from "./reset-course-alert";
 import { PageHeader } from "@/shared/components/ui/page-header";
+import { ProgressBar } from "@/shared/components/ui/progress-bar";
+import { transformSlugToTitle } from "@/shared/helpers/transform-slug-title";
+import { StatCard } from "./stat-card";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 
 type Props = {
   courseSlug: string;
 };
-
-export function transformSlugToTitle(slug: string): string {
-  return slug.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
-}
 
 export function CourseHeader({ courseSlug }: Props) {
   const { data: lessons, isLoading } = useGetLessons(courseSlug);
@@ -28,6 +27,27 @@ export function CourseHeader({ courseSlug }: Props) {
     totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
   const isCompleted = progress === 100;
 
+  const stats = [
+    {
+      icon: Video,
+      label: "Aulas",
+      value: totalLessons,
+      isHighlighted: false,
+    },
+    {
+      icon: Clock,
+      label: "Duração",
+      value: formatHoursMinutes(totalSeconds),
+      isHighlighted: false,
+    },
+    {
+      icon: TrendingUp,
+      label: "Progresso",
+      value: `${progress}%`,
+      isHighlighted: isCompleted,
+    },
+  ];
+
   return (
     <header className="w-full mb-8">
       {/* Title */}
@@ -35,77 +55,26 @@ export function CourseHeader({ courseSlug }: Props) {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-md mx-auto mb-6">
-        {/* Total Lessons */}
-        <div className="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl bg-card border border-border/50">
-          <Video className="size-4 md:size-5 text-primary mb-1.5" />
-          <span className="text-xs text-muted-foreground">Aulas</span>
-          {isLoading ? (
-            <Skeleton className="w-8 h-5 mt-1" />
-          ) : (
-            <span className="text-lg md:text-xl font-semibold text-foreground">
-              {totalLessons}
-            </span>
-          )}
-        </div>
-
-        {/* Duration */}
-        <div className="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl bg-card border border-border/50">
-          <Clock className="size-4 md:size-5 text-primary mb-1.5" />
-          <span className="text-xs text-muted-foreground">Duração</span>
-          {isLoading ? (
-            <Skeleton className="w-12 h-5 mt-1" />
-          ) : (
-            <span className="text-lg md:text-xl font-semibold text-foreground">
-              {formatHoursMinutes(totalSeconds)}
-            </span>
-          )}
-        </div>
-
-        {/* Progress */}
-        <div className="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl bg-card border border-border/50">
-          <TrendingUp
-            className={`size-4 md:size-5 mb-1.5 ${
-              isCompleted ? "text-emerald-500" : "text-primary"
-            }`}
+        {stats.map((stat) => (
+          <StatCard
+            key={stat.label}
+            icon={stat.icon}
+            label={stat.label}
+            value={stat.value}
+            isLoading={isLoading}
+            isHighlighted={stat.isHighlighted}
           />
-          <span className="text-xs text-muted-foreground">Progresso</span>
-          {isLoading ? (
-            <Skeleton className="w-10 h-5 mt-1" />
-          ) : (
-            <span
-              className={`text-lg md:text-xl font-semibold ${
-                isCompleted ? "text-emerald-500" : "text-foreground"
-              }`}
-            >
-              {progress}%
-            </span>
-          )}
-        </div>
+        ))}
       </div>
 
-      {/* Progress Bar */}
       <div className="max-w-md mx-auto space-y-2">
-        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+        <div className="text-center w-full">
           {isLoading ? (
-            <Skeleton className="h-full w-1/3" />
+            <Skeleton className="h-3 w-full" />
           ) : (
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isCompleted ? "bg-emerald-500" : "bg-primary"
-              }`}
-              style={{ width: `${progress}%` }}
-            />
+            <ProgressBar progress={progress} showNotStarted showCompleted />
           )}
         </div>
-        <p className="text-xs text-center text-muted-foreground">
-          {isLoading
-            ? ""
-            : progress === 0
-            ? "Não iniciado"
-            : isCompleted
-            ? "Curso concluído! 🎉"
-            : `${completedLessons} de ${totalLessons} aulas concluídas`}
-        </p>
 
         {/* Reset Button - Only visible when course is 100% complete */}
         {isCompleted && !isLoading && (
@@ -120,3 +89,5 @@ export function CourseHeader({ courseSlug }: Props) {
     </header>
   );
 }
+
+export default CourseHeader;

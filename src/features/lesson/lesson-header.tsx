@@ -1,10 +1,10 @@
 "use client";
 
 import { MinimalistProgress } from "@/shared/components/ui/minimalist-progress";
-import { transformSlugToTitle } from "../course/course-header";
 import { useGetLessons } from "../course/hooks/use-get-lessons";
 import { useGetUniqueLesson } from "./hooks/use-get-unique-lesson";
 import { LessonHeaderSkeleton } from "./lesson-header-skeleton";
+import { transformSlugToTitle } from "@/shared/helpers/transform-slug-title";
 
 type Props = {
   courseSlug: string;

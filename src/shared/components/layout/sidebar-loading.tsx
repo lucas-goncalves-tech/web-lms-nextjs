@@ -1,3 +1,4 @@
+import { navItems } from "@/shared/constants/nav-items";
 import {
   Sidebar,
   SidebarContent,
@@ -9,7 +10,6 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { Skeleton } from "../ui/skeleton";
-import { navItems } from "./app-sidebar";
 
 export function SidebarSkeleton() {
   return (

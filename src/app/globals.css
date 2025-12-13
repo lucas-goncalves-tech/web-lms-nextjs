@@ -32,8 +32,8 @@
   --sidebar-foreground: oklch(0.9551 0 0);
   --sidebar-primary: oklch(0.6132 0.2294 291.7437);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.294 0.013 272.9312);
-  --sidebar-accent-foreground: oklch(0.6132 0.2294 291.7437);
+  --sidebar-accent: oklch(0.35 0.08 285);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
   --sidebar-border: oklch(0.294 0.013 272.9312);
   --sidebar-ring: oklch(0.6132 0.2294 291.7437);
   --font-sans: Plus Jakarta Sans, sans-serif;

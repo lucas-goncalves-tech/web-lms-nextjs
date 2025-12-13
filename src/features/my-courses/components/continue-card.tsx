@@ -7,8 +7,8 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/shared/components/ui/card";
+import { ProgressBar } from "@/shared/components/ui/progress-bar";
 
 interface ContinueCardProps {
   title?: string;
@@ -59,16 +59,7 @@ export function ContinueCard({
       </CardHeader>
 
       <CardContent>
-        {/* Progress Bar */}
-        <div className="space-y-1.5">
-          <div className="h-1.5 w-full rounded-full bg-muted">
-            <div
-              className="h-1.5 rounded-full bg-primary transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-xs text-muted-foreground">{progress}% concluído</p>
-        </div>
+        <ProgressBar progress={progress} />
       </CardContent>
     </Card>
   );

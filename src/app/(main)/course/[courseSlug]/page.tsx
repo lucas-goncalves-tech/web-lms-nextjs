@@ -1,4 +1,4 @@
-import { CourseHeader } from "@/features/course/course-header";
+import CourseHeader from "@/features/course/course-header";
 import { LessonsList } from "@/features/course/lessons-list";
 
 type Props = {

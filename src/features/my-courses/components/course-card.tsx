@@ -9,6 +9,7 @@ import {
 } from "@/shared/components/ui/card";
 import Link from "next/link";
 import { formatHoursMinutes } from "@/shared/helpers/format-duration";
+import { ProgressBar } from "@/shared/components/ui/progress-bar";
 
 interface CourseCardProps {
   slug: string;
@@ -28,7 +29,6 @@ export function CourseCard({
   completedLessons,
 }: CourseCardProps) {
   const progress = Math.round((completedLessons / totalLessons) * 100) || 0;
-  const isCompleted = progress === 100;
 
   return (
     <Link href={`/course/${slug}`}>
@@ -62,23 +62,8 @@ export function CourseCard({
         </CardContent>
 
         <CardFooter>
-          {/* Progress Bar */}
-          <div className="w-full space-y-1.5">
-            <div className="h-1.5 w-full rounded-full bg-muted">
-              <div
-                className={`h-1.5 rounded-full transition-all ${
-                  isCompleted ? "bg-green-500" : "bg-primary"
-                }`}
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {progress === 0
-                ? "Não iniciado"
-                : isCompleted
-                ? "Concluído"
-                : `${progress}% concluído`}
-            </p>
+          <div className="w-full">
+            <ProgressBar progress={progress} showNotStarted showCompleted />
           </div>
         </CardFooter>
       </Card>

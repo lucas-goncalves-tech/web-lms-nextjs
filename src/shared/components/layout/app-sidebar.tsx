@@ -2,15 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Award,
-  LogOut,
-  Lock,
-  Shield,
-  BookOpen,
-  Users,
-  BookA,
-} from "lucide-react";
+import { LogOut, Shield } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -32,37 +24,7 @@ import { Button } from "../ui/button";
 import { useLogout } from "@/features/auth";
 import { useAuth } from "@/shared/context/auth";
 import { SidebarSkeleton } from "./sidebar-loading";
-
-export const navItems = [
-  {
-    title: "Meus cursos",
-    href: "/",
-    icon: BookOpen,
-  },
-  {
-    title: "Meus Certificados",
-    href: "/certificates",
-    icon: Award,
-  },
-  {
-    title: "Segurança",
-    href: "/secure",
-    icon: Lock,
-  },
-];
-
-const adminNavItems = [
-  {
-    title: "Cursos",
-    href: "/admin/courses",
-    icon: BookA,
-  },
-  {
-    title: "Usuários",
-    href: "/admin/users",
-    icon: Users,
-  },
-];
+import { adminNavItems, navItems } from "@/shared/constants/nav-items";
 
 export function AppSidebar() {
   const pathname = usePathname();
