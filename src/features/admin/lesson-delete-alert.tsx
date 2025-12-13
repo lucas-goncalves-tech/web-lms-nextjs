@@ -15,6 +15,7 @@ import { DropdownMenuItem } from "@/shared/components/ui/dropdown-menu";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { LessonTable } from "./schemas/lessons";
+import { useDeleteLesson } from "./hooks/use-delete-lesson";
 
 type Props = {
   lesson: LessonTable;
@@ -28,14 +29,10 @@ export function LessonDeleteAlert({
   onDropdownClose,
 }: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  const { mutateAsync: deleteLesson, isPending } = useDeleteLesson();
 
-  // TODO: Implement useDeleteLesson hook
   const handleDeleteConfirm = async () => {
-    setIsPending(true);
-    // TODO: Call deleteLession mutation
-    console.log("Delete lesson:", lesson.slug, "from course:", courseSlug);
-    setIsPending(false);
+    await deleteLesson({ courseSlug, lessonSlug: lesson.slug });
     setDeleteOpen(false);
     onDropdownClose();
   };
