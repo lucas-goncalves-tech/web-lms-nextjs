@@ -5,6 +5,9 @@ import { useGetLessons } from "../course/hooks/use-get-lessons";
 import { useGetUniqueLesson } from "./hooks/use-get-unique-lesson";
 import { LessonHeaderSkeleton } from "./lesson-header-skeleton";
 import { transformSlugToTitle } from "@/shared/helpers/transform-slug-title";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 
 type Props = {
   courseSlug: string;
@@ -32,19 +35,27 @@ export function LessonHeader({ courseSlug, lessonSlug }: Props) {
   }
 
   return (
-    <div className="mb-6 space-y-2 flex items-start justify-between gap-1 flex-col md:flex-row md:items-center md:gap-4">
-      <div>
-        <h1 className="text-xl space-x-2 md:text-2xl font-bold text-center text-foreground tracking-tight">
-          <span className="inline-block text-muted-foreground">
-            {lesson?.order.toString().padStart(2, "0")}
-          </span>
-          <span className="inline-block">{lesson?.title}</span>
-        </h1>
-        <p className="text-muted-foreground text-sm">
-          Curso &gt; {transformSlugToTitle(courseSlug)}
-        </p>
+    <div className="mb-6 space-y-2">
+      {/* Back Button */}
+      <Button variant="ghost" size="sm" asChild className="gap-2 -ml-2">
+        <Link href={`/course/${courseSlug}`}>
+          <ArrowLeft className="size-4" />
+          Voltar para {transformSlugToTitle(courseSlug)}
+        </Link>
+      </Button>
+
+      {/* Header Content */}
+      <div className="flex items-center justify-between flex-wrap sm:gap-4">
+        <div>
+          <h1 className="text-xl space-x-2 md:text-2xl font-bold text-center text-foreground tracking-tight">
+            <span className="inline-block text-muted-foreground">
+              {lesson?.order.toString().padStart(2, "0")}
+            </span>
+            <span className="inline-block">{lesson?.title}</span>
+          </h1>
+        </div>
+        <MinimalistProgress progress={progress} />
       </div>
-      <MinimalistProgress progress={progress} />
     </div>
   );
 }
