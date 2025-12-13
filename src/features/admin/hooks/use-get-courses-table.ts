@@ -7,7 +7,7 @@ export function useGetCoursesTable() {
   return useQuery({
     queryKey: adminQueryKeys.courses.table(),
     queryFn: async () => {
-      const response = await apiClient.get("admin/courses");
+      const response = await apiClient.get("/admin/courses");
       return coursesFormSchema.parse(response.data);
     },
   });
