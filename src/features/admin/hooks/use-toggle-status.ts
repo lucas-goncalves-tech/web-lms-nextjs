@@ -20,7 +20,7 @@ export function useToggleStatus() {
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.getAllUsers(),
+        queryKey: adminQueryKeys.usersBase(),
       });
       toast.success(result.message);
     },

@@ -14,7 +14,7 @@ export function useCreateUser() {
     onSuccess: (_, variable) => {
       toast.success(`Usuário "${variable.name}" criado com sucesso`);
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.getAllUsers(),
+        queryKey: adminQueryKeys.usersBase(),
       });
     },
     onError: (error) => {
