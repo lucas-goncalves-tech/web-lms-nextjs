@@ -23,21 +23,11 @@ import { useUpdateCourse } from "./hooks/use-update-course";
 import { CreateCourse, createCourseSchema } from "./schemas/create-course";
 import { CourseForm } from "./schemas/course-form";
 import { useState } from "react";
+import { generateSlug } from "@/shared/helpers/generate-slug-from-title";
 
 type Props = {
   course?: CourseForm;
   onDropdownClose?: () => void;
-};
-
-const generateSlug = (title: string): string => {
-  return title
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-+|-+$/g, "");
 };
 
 export function CourseFormDialog({ course, onDropdownClose }: Props) {

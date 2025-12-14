@@ -10,7 +10,7 @@ import { MoreHorizontal } from "lucide-react";
 import { LessonDeleteAlert } from "./lesson-delete-alert";
 import { useState } from "react";
 import { LessonTable } from "./schemas/lessons";
-import { LessonFormDialog } from "./lesson-form-dialog";
+import { EditLessonDialog } from "./lesson-edit-dialog";
 
 type Props = {
   lesson: LessonTable;
@@ -29,7 +29,7 @@ export function LessonActionsDropdown({ lesson, courseSlug }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <LessonFormDialog
+        <EditLessonDialog
           lesson={lesson}
           courseSlug={courseSlug}
           onDropdownClose={() => setOpen(false)}

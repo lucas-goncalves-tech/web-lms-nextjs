@@ -14,7 +14,7 @@ import { LessonActionsDropdown } from "./lesson-action-dropdown";
 import { TableSkeleton } from "./table-skeleton";
 import { MobileCardSkeleton } from "./mobile-card-skeleton";
 import { formatHoursMinutes } from "@/shared/helpers/format-duration";
-import { LessonFormDialog } from "./lesson-form-dialog";
+import { CreateLessonDialog } from "./lesson-create-dialog";
 
 type Props = {
   courseSlug: string;
@@ -44,7 +44,7 @@ export function LessonsTable({ courseSlug }: Props) {
     return (
       <div className="flex flex-col items-center justify-center py-8 gap-4">
         <div className="text-muted-foreground">Nenhuma aula encontrada</div>
-        <LessonFormDialog courseSlug={courseSlug} />
+        <CreateLessonDialog courseSlug={courseSlug} />
       </div>
     );
   }
@@ -52,7 +52,7 @@ export function LessonsTable({ courseSlug }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <LessonFormDialog courseSlug={courseSlug} />
+        <CreateLessonDialog courseSlug={courseSlug} />
       </div>
 
       {/* Mobile View - Cards */}

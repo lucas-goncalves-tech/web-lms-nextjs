@@ -13,64 +13,61 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { DropdownMenuItem } from "@/shared/components/ui/dropdown-menu";
-import { Pencil } from "lucide-react";
 import { useState } from "react";
-import { LessonTable } from "./schemas/lessons";
+import { CreateLesson, createLessonSchema } from "./schemas/lessons";
 import { InputFile } from "@/shared/components/ui/input-file";
+import { generateSlug } from "@/shared/helpers/generate-slug-from-title";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { FormError } from "@/shared/components/ui/form-error";
 
 type Props = {
-  lesson?: LessonTable;
   courseSlug: string;
-  onDropdownClose?: () => void;
 };
 
-export function LessonFormDialog({
-  lesson,
-  courseSlug,
-  onDropdownClose,
-}: Props) {
+export function CreateLessonDialog({ courseSlug }: Props) {
   const [open, setOpen] = useState(false);
-  const isEditMode = !!lesson;
 
-  // TODO: Implement form with react-hook-form
-  const handleCancel = () => {
-    setOpen(false);
-    onDropdownClose?.();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<CreateLesson>({
+    resolver: zodResolver(createLessonSchema),
+  });
+
+  const handleTitleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    if (title) {
+      const slug = generateSlug(title);
+      setValue("slug", slug, { shouldValidate: true });
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Implement create/update lesson logic
-    console.log("Submit lesson for course:", courseSlug);
+  const handleCancel = () => {
     setOpen(false);
-    onDropdownClose?.();
+    reset();
+  };
+
+  const onSubmit = (data: CreateLesson) => {
+    console.log("Create lesson for course:", courseSlug, data);
+    setOpen(false);
+    reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {isEditMode ? (
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <Pencil className="size-4" />
-            Editar
-          </DropdownMenuItem>
-        ) : (
-          <Button>Nova Aula</Button>
-        )}
+        <Button>Nova Aula</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>
-            {isEditMode ? "Editar Aula" : "Criar Nova Aula"}
-          </DialogTitle>
-          <DialogDescription>
-            {isEditMode
-              ? "Atualize as informações da aula"
-              : "Preencha as informações da aula"}
-          </DialogDescription>
+          <DialogTitle>Criar Nova Aula</DialogTitle>
+          <DialogDescription>Preencha as informações da aula</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Title Field */}
           <div>
             <Input
@@ -79,8 +76,9 @@ export function LessonFormDialog({
               label="Título"
               placeholder="Introdução ao JavaScript"
               icon={BookOpen}
-              defaultValue={lesson?.title}
+              {...register("title", { onBlur: handleTitleBlur })}
             />
+            <FormError error={errors.title} />
           </div>
 
           {/* Description Field */}
@@ -95,8 +93,9 @@ export function LessonFormDialog({
               id="description"
               placeholder="Descrição da aula..."
               rows={3}
-              defaultValue={lesson?.description}
+              {...register("description")}
             />
+            <FormError error={errors.description} />
           </div>
 
           {/* Video Field */}
@@ -104,10 +103,10 @@ export function LessonFormDialog({
             <InputFile
               id="video"
               label="Arquivo do video"
-              placeholder="dQw4w9WgXcQ"
               icon={Video}
-              defaultValue={lesson?.video}
+              {...register("video")}
             />
+            <FormError error={errors.video} />
           </div>
 
           {/* Duration Field */}
@@ -118,8 +117,9 @@ export function LessonFormDialog({
               label="Duração (segundos)"
               placeholder="600"
               icon={Clock}
-              defaultValue={lesson?.seconds}
+              {...register("seconds", { valueAsNumber: true })}
             />
+            <FormError error={errors.seconds} />
           </div>
 
           {/* Order Field */}
@@ -130,9 +130,11 @@ export function LessonFormDialog({
               label="Ordem"
               placeholder="1"
               icon={FileText}
-              defaultValue={lesson?.order}
+              {...register("order", { valueAsNumber: true })}
             />
+            <FormError error={errors.order} />
           </div>
+
           {/* Slug Field */}
           <div>
             <Input
@@ -141,13 +143,11 @@ export function LessonFormDialog({
               label="Slug"
               placeholder="introducao-ao-javascript"
               icon={Hash}
-              disabled={isEditMode}
-              defaultValue={lesson?.slug}
+              {...register("slug")}
             />
+            <FormError error={errors.slug} />
             <p className="text-xs text-muted-foreground mt-1">
-              {isEditMode
-                ? "O slug não pode ser alterado"
-                : "URL amigável (apenas letras minúsculas, números e hífens)"}
+              URL amigável (apenas letras minúsculas, números e hífens)
             </p>
           </div>
 
@@ -155,9 +155,7 @@ export function LessonFormDialog({
             <Button type="button" variant="outline" onClick={handleCancel}>
               Cancelar
             </Button>
-            <Button type="submit">
-              {isEditMode ? "Salvar" : "Criar Aula"}
-            </Button>
+            <Button type="submit">Criar Aula</Button>
           </DialogFooter>
         </form>
       </DialogContent>

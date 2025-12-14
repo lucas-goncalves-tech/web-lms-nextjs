@@ -27,10 +27,10 @@ export const zodPasswordValidator = (lengthMessage = "Senha") =>
     .max(72, `${lengthMessage} deve ter no máximo 72 caracteres`);
 
 export const zodIntegerValidator = (numberMessage = "Número") =>
-  z.coerce
-    .number(`${numberMessage} deve ser um número`)
-    .int(`${numberMessage} deve ser um número inteiro`)
-    .nonnegative(`${numberMessage} não pode ser negativa`);
+  z
+    .number({ message: `${numberMessage} deve ser um número` })
+    .int({ message: `${numberMessage} deve ser um número inteiro` })
+    .nonnegative({ message: `${numberMessage} não pode ser negativa` });
 
 export const zodRoleValidator = () => z.enum(["ADMIN", "USER"]);
 export const zodNameValdiator = () =>

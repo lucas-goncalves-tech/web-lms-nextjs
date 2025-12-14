@@ -11,10 +11,10 @@ export const useLogout = () => {
       await apiClient.delete("/auth/logout");
     },
     onSettled: () => {
-      queryClient.clear();
       if (window !== undefined) {
         window.location.href = "/auth";
       }
+      queryClient.clear();
       setUser(null);
     },
   });
