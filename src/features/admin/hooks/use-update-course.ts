@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminQueryKeys } from "./query-keys";
 import { myCoursesKeys } from "@/features/my-courses/hooks/query-keys";
+import { getErrorMessage } from "@/shared/lib/api/errors";
 
 type UpdateCourseData = {
   title: string;
@@ -21,8 +22,8 @@ export function useUpdateCourse() {
     }) => {
       await apiClient.put(`/admin/courses/${courseSlug}/update`, data);
     },
-    onSuccess: () => {
-      toast.success("Curso atualizado com sucesso");
+    onSuccess: (_, variable) => {
+      toast.success(`Curso "${variable.data.title}" atualizado com sucesso`);
       queryClient.invalidateQueries({
         queryKey: adminQueryKeys.getAllCourses(),
       });
@@ -30,8 +31,9 @@ export function useUpdateCourse() {
         queryKey: myCoursesKeys.getAllCourses(),
       });
     },
-    onError: () => {
-      toast.error("Erro ao atualizar curso");
+    onError: (error) => {
+      const message = getErrorMessage(error);
+      toast.error(message);
     },
   });
 }

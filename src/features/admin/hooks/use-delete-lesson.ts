@@ -2,6 +2,8 @@ import { apiClient } from "@/shared/lib/api/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminQueryKeys } from "./query-keys";
+import { getErrorMessage } from "@/shared/lib/api/errors";
+import { courseKeys } from "@/features/course/hooks/query-keys";
 
 export function useDeleteLesson(courseSlug: string) {
   const queryClient = useQueryClient();
@@ -11,14 +13,18 @@ export function useDeleteLesson(courseSlug: string) {
         `/admin/lessons/${courseSlug}/${lessonSlug}/delete`
       );
     },
-    onSuccess: () => {
-      toast.success("Aula deletada com sucesso");
+    onSuccess: (_, lessonSlug) => {
+      toast.success(`Aula "${lessonSlug}" deletada com sucesso`);
       queryClient.invalidateQueries({
         queryKey: adminQueryKeys.getAllLessons(courseSlug),
       });
+      queryClient.invalidateQueries({
+        queryKey: courseKeys.getAllLessons(courseSlug),
+      });
     },
-    onError: () => {
-      toast.error("Error ao deletar aula");
+    onError: (error) => {
+      const message = getErrorMessage(error);
+      toast.error(message);
     },
   });
 }

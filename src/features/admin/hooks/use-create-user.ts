@@ -11,8 +11,8 @@ export function useCreateUser() {
     mutationFn: async (user: AdminCreateUser) => {
       await apiClient.post("/admin/users/new", user);
     },
-    onSuccess: () => {
-      toast.success("Usuário criado com sucesso!");
+    onSuccess: (_, variable) => {
+      toast.success(`Usuário "${variable.name}" criado com sucesso`);
       queryClient.invalidateQueries({
         queryKey: adminQueryKeys.getAllUsers(),
       });

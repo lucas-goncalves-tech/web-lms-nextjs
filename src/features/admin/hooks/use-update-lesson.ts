@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/client";
 import { adminQueryKeys } from "./query-keys";
 import { courseKeys } from "@/features/course/hooks/query-keys";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/shared/lib/api/errors";
 
 interface UpdateLessonRequest {
   lessonSlug: string;
@@ -21,13 +23,20 @@ export function useUpdateLesson(courseSlug: string) {
         data
       );
     },
-    onSuccess: () => {
+    onSuccess: (_, variable) => {
+      toast.success(
+        `Aula "${variable.title ?? variable.lessonSlug}" atualizada com sucesso`
+      );
       queryClient.invalidateQueries({
         queryKey: adminQueryKeys.getAllLessons(courseSlug),
       });
       queryClient.invalidateQueries({
         queryKey: courseKeys.getAllLessons(courseSlug),
       });
+    },
+    onError: (error) => {
+      const message = getErrorMessage(error);
+      toast.error(message);
     },
   });
 }
