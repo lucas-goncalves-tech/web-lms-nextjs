@@ -38,7 +38,7 @@ export const createLessonSchema = z.object({
     ),
 });
 
-export const editLessonSchema = z.object({
+export const updateLessonSchema = z.object({
   ...baseLessonSchema,
   video: z
     .instanceof(File)
@@ -57,4 +57,4 @@ export const videoPathSchema = z.object({
 
 export type LessonTable = z.infer<typeof lessonTableSchema>;
 export type CreateLesson = z.infer<typeof createLessonSchema>;
-export type EditLesson = z.infer<typeof editLessonSchema>;
+export type UpdateLesson = z.infer<typeof updateLessonSchema>;

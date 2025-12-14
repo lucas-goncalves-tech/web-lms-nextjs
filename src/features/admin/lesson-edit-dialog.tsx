@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Hash, Clock, Video, FileText } from "lucide-react";
+import { BookOpen, Hash, Video, FileText } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -15,12 +15,18 @@ import {
 } from "@/shared/components/ui/dialog";
 import { DropdownMenuItem } from "@/shared/components/ui/dropdown-menu";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
-import { EditLesson, editLessonSchema, LessonTable } from "./schemas/lessons";
+import { ChangeEvent, useState } from "react";
+import {
+  UpdateLesson,
+  updateLessonSchema,
+  LessonTable,
+} from "./schemas/lessons";
 import { InputFile } from "@/shared/components/ui/input-file";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormError } from "@/shared/components/ui/form-error";
+import { useUploadVideo } from "./hooks/use-upload-video";
+import { useUpdateLesson } from "./hooks/use-update-lesson";
 
 type Props = {
   lesson: LessonTable;
@@ -34,18 +40,22 @@ export function EditLessonDialog({
   onDropdownClose,
 }: Props) {
   const [open, setOpen] = useState(false);
+  const { mutateAsync: uploadVideo, isPending: isUploadPending } =
+    useUploadVideo();
+  const { mutateAsync: updateLesson, isPending: isUpdatePending } =
+    useUpdateLesson(courseSlug);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm<EditLesson>({
-    resolver: zodResolver(editLessonSchema),
+  } = useForm<UpdateLesson>({
+    resolver: zodResolver(updateLessonSchema),
     defaultValues: {
       slug: lesson.slug,
       title: lesson.title,
-      seconds: lesson.seconds,
       description: lesson.description,
       order: lesson.order,
     },
@@ -57,11 +67,32 @@ export function EditLessonDialog({
     reset();
   };
 
-  const onSubmit = (data: EditLesson) => {
-    console.log("Edit lesson for course:", courseSlug, data);
+  const onSubmit = async (data: UpdateLesson) => {
+    const { video, ...lessonData } = data;
+
+    let videoPath = lesson.video;
+    let seconds = lesson.seconds;
+
+    // Se um novo vídeo foi selecionado, faz o upload
+    if (video) {
+      const uploadResult = await uploadVideo(video);
+      videoPath = uploadResult.path;
+      seconds = uploadResult.seconds;
+    }
+
+    await updateLesson({
+      lessonSlug: lesson.slug,
+      ...lessonData,
+      video: videoPath,
+      seconds,
+    });
+
     setOpen(false);
     onDropdownClose?.();
+    reset();
   };
+
+  const isPending = isUploadPending || isUpdatePending;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -113,25 +144,22 @@ export function EditLessonDialog({
               id="video"
               label="Novo arquivo de vídeo (opcional)"
               icon={Video}
-              {...register("video")}
+              {...(register("video"),
+              {
+                onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                  const file = e.target.files;
+                  if (file && file.length !== 0) {
+                    setValue("video", file[0], {
+                      shouldValidate: true,
+                    });
+                  }
+                },
+              })}
             />
             <FormError error={errors.video} />
             <p className="text-xs text-muted-foreground mt-1">
               Vídeo atual: {lesson.video}
             </p>
-          </div>
-
-          {/* Duration Field */}
-          <div>
-            <Input
-              id="seconds"
-              type="number"
-              label="Duração (segundos)"
-              placeholder="600"
-              icon={Clock}
-              {...register("seconds", { valueAsNumber: true })}
-            />
-            <FormError error={errors.seconds} />
           </div>
 
           {/* Order Field */}
@@ -165,10 +193,17 @@ export function EditLessonDialog({
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleCancel}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+              disabled={isPending}
+            >
               Cancelar
             </Button>
-            <Button type="submit">Salvar</Button>
+            <Button type="submit" disabled={isPending}>
+              Salvar
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
