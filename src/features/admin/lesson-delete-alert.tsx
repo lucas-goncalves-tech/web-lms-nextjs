@@ -29,10 +29,10 @@ export function LessonDeleteAlert({
   onDropdownClose,
 }: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const { mutateAsync: deleteLesson, isPending } = useDeleteLesson();
+  const { mutateAsync: deleteLesson, isPending } = useDeleteLesson(courseSlug);
 
   const handleDeleteConfirm = async () => {
-    await deleteLesson({ courseSlug, lessonSlug: lesson.slug });
+    await deleteLesson(lesson.slug);
     setDeleteOpen(false);
     onDropdownClose();
   };

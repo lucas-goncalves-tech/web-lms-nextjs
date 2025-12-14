@@ -3,15 +3,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminQueryKeys } from "./query-keys";
 
-type Params = {
-  courseSlug: string;
-  lessonSlug: string;
-};
-
-export function useDeleteLesson() {
+export function useDeleteLesson(courseSlug: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ courseSlug, lessonSlug }: Params) => {
+    mutationFn: async (lessonSlug: string) => {
       await apiClient.delete(
         `/admin/lessons/${courseSlug}/${lessonSlug}/delete`
       );
@@ -19,7 +14,7 @@ export function useDeleteLesson() {
     onSuccess: () => {
       toast.success("Aula deletada com sucesso");
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.getAllLessons(),
+        queryKey: adminQueryKeys.getAllLessons(courseSlug),
       });
     },
     onError: () => {

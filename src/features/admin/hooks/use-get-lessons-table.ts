@@ -5,7 +5,7 @@ import { lessonsTableSchema } from "../schemas/lessons";
 
 export function useGetLessonsTable(courseSlug: string) {
   return useQuery({
-    queryKey: adminQueryKeys.getAllLessons(),
+    queryKey: adminQueryKeys.getAllLessons(courseSlug),
     queryFn: async () => {
       const response = await apiClient.get(`/admin/lessons/${courseSlug}`);
       return lessonsTableSchema.parse(response.data);

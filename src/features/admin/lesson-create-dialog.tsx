@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Hash, Clock, Video, FileText } from "lucide-react";
+import { BookOpen, Hash, Video, FileText } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -13,13 +13,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { CreateLesson, createLessonSchema } from "./schemas/lessons";
 import { InputFile } from "@/shared/components/ui/input-file";
 import { generateSlug } from "@/shared/helpers/generate-slug-from-title";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormError } from "@/shared/components/ui/form-error";
+import { useUploadVideo } from "./hooks/use-upload-video";
+import { useCreateLesson } from "./hooks/use-create-lesson";
 
 type Props = {
   courseSlug: string;
@@ -27,6 +29,9 @@ type Props = {
 
 export function CreateLessonDialog({ courseSlug }: Props) {
   const [open, setOpen] = useState(false);
+  const { mutateAsync: uploadVideo, isPending } = useUploadVideo();
+  const { mutateAsync: createLesson, isPending: isCreateLessonPeding } =
+    useCreateLesson(courseSlug);
 
   const {
     register,
@@ -51,8 +56,14 @@ export function CreateLessonDialog({ courseSlug }: Props) {
     reset();
   };
 
-  const onSubmit = (data: CreateLesson) => {
-    console.log("Create lesson for course:", courseSlug, data);
+  const onSubmit = async (data: CreateLesson) => {
+    const { video, ...lessonData } = data;
+    const { path, seconds } = await uploadVideo(video);
+    await createLesson({
+      ...lessonData,
+      video: path,
+      seconds,
+    });
     setOpen(false);
     reset();
   };
@@ -104,22 +115,19 @@ export function CreateLessonDialog({ courseSlug }: Props) {
               id="video"
               label="Arquivo do video"
               icon={Video}
-              {...register("video")}
+              {...(register("video"),
+              {
+                onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                  const file = e.target.files;
+                  if (file && file.length !== 0) {
+                    setValue("video", file[0], {
+                      shouldValidate: true,
+                    });
+                  }
+                },
+              })}
             />
             <FormError error={errors.video} />
-          </div>
-
-          {/* Duration Field */}
-          <div>
-            <Input
-              id="seconds"
-              type="number"
-              label="Duração (segundos)"
-              placeholder="600"
-              icon={Clock}
-              {...register("seconds", { valueAsNumber: true })}
-            />
-            <FormError error={errors.seconds} />
           </div>
 
           {/* Order Field */}
@@ -152,10 +160,17 @@ export function CreateLessonDialog({ courseSlug }: Props) {
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleCancel}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+              disabled={isPending || isCreateLessonPeding}
+            >
               Cancelar
             </Button>
-            <Button type="submit">Criar Aula</Button>
+            <Button type="submit" disabled={isPending || isCreateLessonPeding}>
+              Criar Aula
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

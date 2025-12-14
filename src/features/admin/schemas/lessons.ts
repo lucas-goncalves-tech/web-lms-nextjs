@@ -21,13 +21,14 @@ export const lessonTableSchema = z.object({
 
 export const lessonsTableSchema = z.array(lessonTableSchema);
 
-// Schema para CRIAR aula (video é File obrigatório)
-export const createLessonSchema = z.object({
+const baseLessonSchema = {
   slug: zodSlugValidator(),
   title: zodTitleValidator(),
-  seconds: zodIntegerValidator(),
   description: zodDescriptionValidator(),
   order: zodIntegerValidator(),
+};
+export const createLessonSchema = z.object({
+  ...baseLessonSchema,
   video: z
     .instanceof(File, { message: "Arquivo de vídeo é obrigatório" })
     .refine((file) => file.size > 0, "Arquivo não pode estar vazio")
@@ -37,13 +38,8 @@ export const createLessonSchema = z.object({
     ),
 });
 
-// Schema para EDITAR aula (video é opcional - só envia se quiser trocar)
 export const editLessonSchema = z.object({
-  slug: zodSlugValidator(),
-  title: zodTitleValidator(),
-  seconds: zodIntegerValidator(),
-  description: zodDescriptionValidator(),
-  order: zodIntegerValidator(),
+  ...baseLessonSchema,
   video: z
     .instanceof(File)
     .refine((file) => file.size > 0, "Arquivo não pode estar vazio")
@@ -52,6 +48,11 @@ export const editLessonSchema = z.object({
       "Arquivo deve ser um vídeo"
     )
     .optional(),
+});
+
+export const videoPathSchema = z.object({
+  path: z.string(),
+  seconds: z.number().nonnegative(),
 });
 
 export type LessonTable = z.infer<typeof lessonTableSchema>;
