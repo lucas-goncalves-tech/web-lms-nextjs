@@ -24,10 +24,10 @@ export function useUpdateCourse() {
     onSuccess: () => {
       toast.success("Curso atualizado com sucesso");
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.courses.all(),
+        queryKey: adminQueryKeys.getAllCourses(),
       });
       queryClient.invalidateQueries({
-        queryKey: myCoursesKeys.courses.all(),
+        queryKey: myCoursesKeys.getAllCourses(),
       });
     },
     onError: () => {

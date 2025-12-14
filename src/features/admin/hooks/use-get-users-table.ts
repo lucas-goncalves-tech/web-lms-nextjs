@@ -5,7 +5,7 @@ import { usersTableSchema } from "../schemas/user";
 
 export function useGetUsersTable() {
   return useQuery({
-    queryKey: adminQueryKeys.users.all(),
+    queryKey: adminQueryKeys.getAllUsers(),
     queryFn: async () => {
       const res = await apiClient.get("/admin/users");
       return usersTableSchema.parse(res.data);

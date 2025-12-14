@@ -5,7 +5,7 @@ import { adminQueryKeys } from "./query-keys";
 
 export function useGetCoursesTable() {
   return useQuery({
-    queryKey: adminQueryKeys.courses.all(),
+    queryKey: adminQueryKeys.getAllCourses(),
     queryFn: async () => {
       const response = await apiClient.get("/admin/courses");
       return coursesFormSchema.parse(response.data);

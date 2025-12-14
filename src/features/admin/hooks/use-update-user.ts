@@ -18,7 +18,7 @@ export function useUpdateUser() {
     onSuccess: () => {
       toast.success("Usuário editado com sucesso!");
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.users.all(),
+        queryKey: adminQueryKeys.getAllUsers(),
       });
     },
     onError: (error) => {

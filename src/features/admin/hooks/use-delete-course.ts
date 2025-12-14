@@ -12,7 +12,7 @@ export function useDeleteCourse() {
     onSuccess: () => {
       toast.success("Curso deletado com sucesso");
       queryClient.invalidateQueries({
-        queryKey: adminQueryKeys.courses.all(),
+        queryKey: adminQueryKeys.getAllCourses(),
       });
     },
     onError: () => {
