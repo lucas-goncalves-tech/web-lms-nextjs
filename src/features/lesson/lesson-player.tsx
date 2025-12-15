@@ -22,6 +22,8 @@ export function LessonPlayer({ courseSlug, lessonSlug }: Props) {
     lessonSlug
   );
 
+  const api_url = process.env.NEXT_PUBLIC_API_URL || "";
+
   if (isError) return null;
   return (
     <div className="space-y-6">
@@ -29,7 +31,13 @@ export function LessonPlayer({ courseSlug, lessonSlug }: Props) {
         <Skeleton className="aspect-video rounded-xs"></Skeleton>
       ) : (
         <>
-          <div className="aspect-video bg-zinc-800 rounded-xs"></div>
+          <video
+            src={`${api_url}${lesson?.videoUrl}`}
+            controls
+            className="aspect-video bg-zinc-800 rounded-xs"
+          >
+            Player não disponivel
+          </video>
           <div className="flex items-center gap-2 justify-between">
             {/* Anterior */}
             {lesson?.prevLesson ? (
