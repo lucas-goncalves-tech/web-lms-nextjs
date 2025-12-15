@@ -33,6 +33,9 @@ export function useUpdateLesson(courseSlug: string) {
       queryClient.invalidateQueries({
         queryKey: courseKeys.getAllLessons(courseSlug),
       });
+      queryClient.invalidateQueries({
+        queryKey: courseKeys.getCourse(courseSlug),
+      });
     },
     onError: (error) => {
       const message = getErrorMessage(error);

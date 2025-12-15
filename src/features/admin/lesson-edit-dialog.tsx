@@ -144,6 +144,7 @@ export function EditLessonDialog({
               id="video"
               label="Novo arquivo de vídeo (opcional)"
               icon={Video}
+              isLoading={isUploadPending}
               {...(register("video"),
               {
                 onChange: (e: ChangeEvent<HTMLInputElement>) => {

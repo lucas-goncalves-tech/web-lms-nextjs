@@ -115,6 +115,7 @@ export function CreateLessonDialog({ courseSlug }: Props) {
               id="video"
               label="Arquivo do video"
               icon={Video}
+              isLoading={isPending}
               {...(register("video"),
               {
                 onChange: (e: ChangeEvent<HTMLInputElement>) => {

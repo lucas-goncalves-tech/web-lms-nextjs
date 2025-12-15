@@ -8,12 +8,23 @@ interface InputFileProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "value"> {
   label?: string;
   icon?: LucideIcon;
+  isLoading?: boolean;
   onFileChange?: (file: File | null) => void;
 }
 
 const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
   (
-    { className, label, icon, id, onChange, onFileChange, accept, ...props },
+    {
+      className,
+      label,
+      icon,
+      id,
+      onChange,
+      onFileChange,
+      accept,
+      isLoading,
+      ...props
+    },
     ref
   ) => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -27,16 +38,18 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
 
     const handleFileChange = React.useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isLoading) return;
         const file = e.target.files?.[0] || null;
         setSelectedFile(file);
         onFileChange?.(file);
         onChange?.(e);
       },
-      [onChange, onFileChange]
+      [onChange, onFileChange, isLoading]
     );
 
     const handleRemoveFile = React.useCallback(
       (e: React.MouseEvent) => {
+        if (isLoading) return;
         e.stopPropagation();
         setSelectedFile(null);
         onFileChange?.(null);
@@ -44,21 +57,30 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
           inputRef.current.value = "";
         }
       },
-      [onFileChange]
+      [onFileChange, isLoading]
     );
 
-    const handleDragOver = React.useCallback((e: React.DragEvent) => {
-      e.preventDefault();
-      setIsDragging(true);
-    }, []);
+    const handleDragOver = React.useCallback(
+      (e: React.DragEvent) => {
+        if (isLoading) return;
+        e.preventDefault();
+        setIsDragging(true);
+      },
+      [isLoading]
+    );
 
-    const handleDragLeave = React.useCallback((e: React.DragEvent) => {
-      e.preventDefault();
-      setIsDragging(false);
-    }, []);
+    const handleDragLeave = React.useCallback(
+      (e: React.DragEvent) => {
+        if (isLoading) return;
+        e.preventDefault();
+        setIsDragging(false);
+      },
+      [isLoading]
+    );
 
     const handleDrop = React.useCallback(
       (e: React.DragEvent) => {
+        if (isLoading) return;
         e.preventDefault();
         setIsDragging(false);
         const file = e.dataTransfer.files?.[0] || null;
@@ -73,12 +95,13 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
           }
         }
       },
-      [onFileChange]
+      [onFileChange, isLoading]
     );
 
     const handleClick = React.useCallback(() => {
+      if (isLoading) return;
       inputRef.current?.click();
-    }, []);
+    }, [isLoading]);
 
     const formatFileSize = (bytes: number) => {
       if (bytes === 0) return "0 Bytes";
@@ -108,6 +131,8 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
             "hover:border-primary/50 hover:bg-background/70",
             "focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/50",
             isDragging && "border-primary bg-primary/5 ring-2 ring-primary/50",
+            isLoading &&
+              "cursor-not-allowed opacity-80 hover:border-input hover:bg-background/50",
             className
           )}
         >
@@ -118,6 +143,7 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
             accept={accept}
             onChange={handleFileChange}
             className="sr-only"
+            disabled={isLoading}
             {...props}
           />
 
@@ -137,7 +163,8 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
               <button
                 type="button"
                 onClick={handleRemoveFile}
-                className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                disabled={isLoading}
+                className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive disabled:pointer-events-none disabled:opacity-50"
                 aria-label="Remover arquivo"
               >
                 <X size={16} />
@@ -162,6 +189,29 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
                 )}
               </div>
             </>
+          )}
+
+          {/* Indeterminate Progress Bar */}
+          {isLoading && (
+            <div className="absolute inset-x-0 bottom-0 h-1 overflow-hidden bg-primary/20">
+              <div className="h-full w-full origin-left bg-primary animate-progress-indeterminate" />
+              <style jsx>{`
+                @keyframes progress-indeterminate {
+                  0% {
+                    transform: translateX(-100%) scaleX(0.2);
+                  }
+                  50% {
+                    transform: translateX(0%) scaleX(0.5);
+                  }
+                  100% {
+                    transform: translateX(100%) scaleX(0.2);
+                  }
+                }
+                .animate-progress-indeterminate {
+                  animation: progress-indeterminate 1.5s infinite linear;
+                }
+              `}</style>
+            </div>
           )}
         </div>
       </div>

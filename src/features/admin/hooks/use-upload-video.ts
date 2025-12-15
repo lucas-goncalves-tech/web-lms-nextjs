@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/lib/api/client";
 import { useMutation } from "@tanstack/react-query";
 import { videoPathSchema } from "../schemas/lessons";
+import { toast } from "sonner";
 
 export function useUploadVideo() {
   return useMutation({
@@ -13,6 +14,11 @@ export function useUploadVideo() {
       });
 
       return videoPathSchema.parse(res.data);
+    },
+    onError: () => {
+      toast.error(
+        "Erro de conexão. Verifique sua internet ou se o arquivo é maior que 500mb."
+      );
     },
   });
 }
