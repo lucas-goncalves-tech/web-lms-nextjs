@@ -11,9 +11,6 @@ export function CourseGrid() {
 
   return (
     <div>
-      <h3 className="mb-4 text-2xl font-bold text-foreground text-center">
-        Cursos
-      </h3>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {isLoading ? (
           <>
