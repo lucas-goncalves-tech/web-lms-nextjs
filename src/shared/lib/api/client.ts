@@ -22,11 +22,7 @@ apiClient.interceptors.response.use(
       window.location.href = "/auth";
     }
 
-    if (
-      typeof window !== "undefined" &&
-      error.response?.status === 403 &&
-      window.location.pathname.startsWith("/admin")
-    ) {
+    if (typeof window !== "undefined" && error.response?.status === 403) {
       window.location.href = "/";
     }
     return Promise.reject(error);

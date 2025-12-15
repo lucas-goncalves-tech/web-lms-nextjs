@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -15,6 +13,14 @@ import { TableSkeleton } from "./table-skeleton";
 import { MobileCardSkeleton } from "./mobile-card-skeleton";
 import { Badge } from "@/shared/components/ui/badge";
 import { Input } from "@/shared/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 import { UserActionsDropdown } from "./user-actions-dropdown";
 import { useGetUsersTable } from "./hooks/use-get-users-table";
 import { UserCreateFormDialog } from "./user-create-form-dialog";
@@ -27,6 +33,7 @@ import {
   PaginationPrevious,
 } from "@/shared/components/ui/pagination";
 import { SearchIcon } from "lucide-react";
+import { FormEvent, useRef } from "react";
 
 export type UserForm = {
   id: string;
@@ -36,122 +43,71 @@ export type UserForm = {
   isActive: number;
 };
 
-const LIMIT = 10;
-const DEBOUNCE_MS = 400;
+const LIMIT_OPTIONS = [5, 10, 20, 50] as const;
 
 export function UserTable() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  // Read from URL
-  const urlSearch = searchParams.get("search") ?? "";
-  const page = Number(searchParams.get("page")) || 1;
-
-  // Local state for input (prevents cursor jump)
-  const [inputValue, setInputValue] = useState(urlSearch);
-
-  // Sync input when URL changes externally (e.g., browser back)
-  useEffect(() => {
-    setInputValue(urlSearch);
-  }, [urlSearch]);
-
-  // Debounced URL update
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (inputValue !== urlSearch) {
-        const params = new URLSearchParams(searchParams.toString());
-        if (inputValue) {
-          params.set("search", inputValue);
-        } else {
-          params.delete("search");
-        }
-        params.set("page", "1");
-        router.push(`${pathname}?${params.toString()}`);
-      }
-    }, DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
-  }, [inputValue, urlSearch, pathname, router, searchParams]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const {
-    data: users,
+    data,
     isLoading,
     isError,
-  } = useGetUsersTable({
-    search: urlSearch,
+    search,
     page,
-    limit: LIMIT,
-  });
+    limit,
+    setSearch,
+    setLimit,
+    goToPage,
+  } = useGetUsersTable();
 
-  const goToPage = useCallback(
-    (newPage: number) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("page", String(newPage));
-      router.push(`${pathname}?${params.toString()}`);
-    },
-    [pathname, router, searchParams]
-  );
+  const users = data?.users;
+  const totalPages = data?.totalPages ?? 0;
 
-  const handlePrevious = () => {
-    if (page > 1) goToPage(page - 1);
-  };
-
-  const handleNext = () => {
-    if (users && users.length === LIMIT) {
-      goToPage(page + 1);
-    }
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    setSearch(inputRef.current?.value ?? "");
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header: Search + Create Button + Pagination - ALWAYS VISIBLE */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 max-w-sm">
-            <Input
-              id="search-users"
-              type="text"
-              icon={SearchIcon}
-              placeholder="Nome ou email..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-          </div>
-          <UserCreateFormDialog />
+    <div className="space-y-4 pb-10">
+      {/* Header: Search + Limit Select - Responsivo */}
+      <form onSubmit={handleSearch} className="flex flex-wrap gap-3">
+        <div className="flex items-center gap-2 flex-1 min-w-[250px]">
+          <Input
+            ref={inputRef}
+            id="search-users"
+            type="text"
+            icon={SearchIcon}
+            placeholder="Nome ou email..."
+            defaultValue={search}
+          />
+          <Button type="submit" size="sm">
+            Buscar
+          </Button>
         </div>
-        <div className="flex justify-end">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={handlePrevious}
-                  className={
-                    page === 1
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink isActive>{page}</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext
-                  onClick={handleNext}
-                  className={
-                    !users || users.length < LIMIT
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
+            Por página:
+          </span>
+          <Select
+            value={String(limit)}
+            onValueChange={(v) => setLimit(Number(v))}
+          >
+            <SelectTrigger size="sm" className="w-[70px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {LIMIT_OPTIONS.map((opt) => (
+                <SelectItem key={opt} value={String(opt)}>
+                  {opt}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-      </div>
+      </form>
 
-      {/* Loading state - only for table content */}
+      {/* Loading state */}
       {isLoading && (
         <>
           <MobileCardSkeleton />
@@ -248,6 +204,55 @@ export function UserTable() {
           </Table>
         </div>
       )}
+
+      {/* Pagination com botões de página */}
+      {!isLoading &&
+        !isError &&
+        users &&
+        users.length > 0 &&
+        totalPages > 1 && (
+          <div className="flex justify-end">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => page > 1 && goToPage(page - 1)}
+                    className={
+                      page <= 1
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (p) => (
+                    <PaginationItem key={p}>
+                      <PaginationLink
+                        isActive={p === page}
+                        onClick={() => goToPage(p)}
+                        className="cursor-pointer"
+                      >
+                        {p}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                )}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => page < totalPages && goToPage(page + 1)}
+                    className={
+                      page >= totalPages
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
+
+      <UserCreateFormDialog />
     </div>
   );
 }

@@ -55,7 +55,7 @@ export function UserCreateFormDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Novo Usuário</Button>
+        <Button className="fixed bottom-4 right-4 z-50">Novo Usuário</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

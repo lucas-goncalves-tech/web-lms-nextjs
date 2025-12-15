@@ -1,18 +1,35 @@
 import { useQuery } from "@tanstack/react-query";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { adminQueryKeys } from "./query-keys";
 import { apiClient } from "@/shared/lib/api/client";
 import { usersTableSchema } from "../schemas/user";
 
-export type UsersTableParams = {
-  search?: string;
-  page?: number;
-  limit?: number;
-};
+const DEFAULT_LIMIT = 10;
 
-export function useGetUsersTable(params: UsersTableParams = {}) {
-  const { search = "", page = 1, limit = 10 } = params;
+export function useGetUsersTable() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  return useQuery({
+  // URL como single source of truth
+  const search = searchParams.get("search") ?? "";
+  const page = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || DEFAULT_LIMIT;
+
+  // Função reutilizável para atualizar URL
+  const updateUrl = (updates: Record<string, string | null>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === "") {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+    });
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const query = useQuery({
     queryKey: adminQueryKeys.getAllUsers({ search, page, limit }),
     queryFn: async () => {
       const queryParams = new URLSearchParams();
@@ -21,7 +38,23 @@ export function useGetUsersTable(params: UsersTableParams = {}) {
       queryParams.set("limit", String(limit));
 
       const res = await apiClient.get(`/admin/users?${queryParams.toString()}`);
-      return usersTableSchema.parse(res.data);
+      const users = usersTableSchema.parse(res.data);
+      const total = users[0]?.total ?? 0;
+      const totalPages = Math.ceil(total / limit);
+      return { users, total, totalPages };
     },
   });
+
+  return {
+    ...query,
+    // Valores atuais da URL
+    search,
+    page,
+    limit,
+    // Ações de navegação
+    setSearch: (value: string) =>
+      updateUrl({ search: value || null, page: "1" }),
+    setLimit: (value: number) => updateUrl({ limit: String(value), page: "1" }),
+    goToPage: (newPage: number) => updateUrl({ page: String(newPage) }),
+  };
 }
