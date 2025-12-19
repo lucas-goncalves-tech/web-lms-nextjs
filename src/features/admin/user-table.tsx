@@ -72,7 +72,7 @@ export function UserTable() {
     <div className="space-y-4 pb-10">
       {/* Header: Search + Limit Select - Responsivo */}
       <form onSubmit={handleSearch} className="flex flex-wrap gap-3">
-        <div className="flex items-center gap-2 flex-1 min-w-[250px]">
+        <div className="flex items-center gap-2 flex-1">
           <Input
             ref={inputRef}
             id="search-users"
