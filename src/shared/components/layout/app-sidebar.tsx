@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/shared/components/ui/sidebar";
 import {
   Avatar,
@@ -30,6 +31,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
   const { mutate: logout } = useLogout();
+  const { setOpenMobile } = useSidebar();
 
   if (!user) return <SidebarSkeleton />;
 
@@ -70,6 +72,7 @@ export function AppSidebar() {
                     asChild
                     isActive={pathname === item.href}
                     tooltip={item.title}
+                    onClick={() => setOpenMobile(false)}
                   >
                     <Link href={item.href}>
                       <item.icon className="h-4 w-4" />
@@ -92,6 +95,7 @@ export function AppSidebar() {
                       asChild
                       isActive={pathname === item.href}
                       tooltip={item.title}
+                      onClick={() => setOpenMobile(false)}
                     >
                       <Link href={item.href}>
                         <item.icon className="h-4 w-4" />
