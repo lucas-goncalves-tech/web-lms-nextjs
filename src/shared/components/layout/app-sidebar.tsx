@@ -26,8 +26,11 @@ import { SidebarSkeleton } from "./sidebar-loading";
 import { adminNavItems, navItems } from "@/shared/constants/nav-items";
 import { useAuth } from "@/shared/context/auth";
 import { useLogout } from "@/features/auth";
+import { useAvatar } from "@/shared/hooks/use-avatar";
+import { Skeleton } from "../ui/skeleton";
 
 export function AppSidebar() {
+  const { data: avatarUrl, isLoading } = useAvatar();
   const pathname = usePathname();
   const { user, setIsLoading } = useAuth();
   const { mutate: logout } = useLogout();
@@ -46,7 +49,11 @@ export function AppSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
-            <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
+            {isLoading ? (
+              <Skeleton className="size-10 rounded-full" />
+            ) : (
+              <AvatarImage src={avatarUrl} alt="Avatar" />
+            )}
             <AvatarFallback>HS</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-1 flex-1 min-w-0">

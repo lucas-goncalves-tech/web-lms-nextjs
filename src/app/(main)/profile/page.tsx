@@ -1,3 +1,5 @@
+import { UpdateAvatarForm } from "@/features/profile/components/update-avatar-form";
+import { UpdateEmailForm } from "@/features/profile/components/update-email-form";
 import { UpdatePasswordForm } from "@/features/profile/components/update-password-form";
 import { PageHeader } from "@/shared/components/ui/page-header";
 
@@ -6,7 +8,8 @@ export default function ProfilePage() {
     <div className="space-y-8 max-w-2xl w-full">
       <PageHeader title="Perfil" subtitle="Gerencie seu perfil" />
 
-      {/* Update Password Form */}
+      <UpdateAvatarForm />
+      <UpdateEmailForm />
       <UpdatePasswordForm />
     </div>
   );

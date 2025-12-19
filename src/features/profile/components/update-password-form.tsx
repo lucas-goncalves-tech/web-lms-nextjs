@@ -23,9 +23,14 @@ import {
 } from "../schemas/update-password";
 
 export function UpdatePasswordForm() {
-  const form = useForm<UpdatePassword>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting, isDirty },
+    reset,
+  } = useForm<UpdatePassword>({
     resolver: zodResolver(updatePasswordSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       currentPassword: "",
       newPassword: "",
@@ -37,7 +42,7 @@ export function UpdatePasswordForm() {
     try {
       await apiClient.put("/user/password/update", data);
       toast.success("Senha atualizada com sucesso!");
-      form.reset();
+      reset();
     } catch (error) {
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);
@@ -61,7 +66,7 @@ export function UpdatePasswordForm() {
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Current Password */}
             <div>
               <Input
@@ -70,9 +75,9 @@ export function UpdatePasswordForm() {
                 label="Senha Atual"
                 placeholder="Digite sua senha atual"
                 icon={Lock}
-                {...form.register("currentPassword")}
+                {...register("currentPassword")}
               />
-              <FormError error={form.formState.errors.currentPassword} />
+              <FormError error={errors.currentPassword} />
             </div>
 
             {/* New Password */}
@@ -83,9 +88,9 @@ export function UpdatePasswordForm() {
                 label="Nova Senha"
                 placeholder="Digite sua nova senha"
                 icon={KeyRound}
-                {...form.register("newPassword")}
+                {...register("newPassword")}
               />
-              <FormError error={form.formState.errors.newPassword} />
+              <FormError error={errors.newPassword} />
             </div>
 
             {/* Confirm Password */}
@@ -96,19 +101,17 @@ export function UpdatePasswordForm() {
                 label="Confirmar Nova Senha"
                 placeholder="Confirme sua nova senha"
                 icon={KeyRound}
-                {...form.register("confirmPassword")}
+                {...register("confirmPassword")}
               />
-              <FormError error={form.formState.errors.confirmPassword} />
+              <FormError error={errors.confirmPassword} />
             </div>
 
             {/* Submit Button */}
             <Button
               className="w-full"
-              disabled={form.formState.isSubmitting || !form.formState.isValid}
+              disabled={!isDirty || isSubmitting || !isValid}
             >
-              {form.formState.isSubmitting
-                ? "Atualizando..."
-                : "Atualizar Senha"}
+              {isSubmitting ? "Atualizando..." : "Atualizar Senha"}
             </Button>
           </form>
         </CardContent>
