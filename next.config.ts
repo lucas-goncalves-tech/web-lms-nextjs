@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
   experimental: {
-    // Melhora o Fast Refresh
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
   },
 };

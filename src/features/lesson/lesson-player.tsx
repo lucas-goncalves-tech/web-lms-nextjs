@@ -5,6 +5,7 @@ import { useGetUniqueLesson } from "./hooks/use-get-unique-lesson";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import Link from "next/link";
 import { useCompleteLesson } from "./hooks/use-complete-lesson";
+import { useRouter } from "next/navigation";
 
 type Props = {
   courseSlug: string;
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export function LessonPlayer({ courseSlug, lessonSlug }: Props) {
+  const router = useRouter();
   const {
     data: lesson,
     isLoading,
@@ -24,6 +26,16 @@ export function LessonPlayer({ courseSlug, lessonSlug }: Props) {
 
   const api_url = process.env.NEXT_PUBLIC_API_URL || "";
 
+  const handleEndVideo = async () => {
+    console.log("terminou");
+    if (!lesson?.completed) {
+      await completeLesson();
+    }
+    if (lesson?.nextLesson && !lesson?.completed) {
+      router.push(`/course/${courseSlug}/${lesson.nextLesson}`);
+    }
+  };
+
   if (isError) return null;
   return (
     <div className="space-y-6">
@@ -35,6 +47,7 @@ export function LessonPlayer({ courseSlug, lessonSlug }: Props) {
             src={`${api_url}${lesson?.videoUrl}`}
             controls
             className="aspect-video bg-zinc-800 rounded-xs"
+            onEnded={handleEndVideo}
           >
             Player não disponivel
           </video>
