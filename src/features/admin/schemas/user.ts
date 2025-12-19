@@ -11,4 +11,4 @@ export const userTableSchema = z.object({
 
 export const usersTableSchema = z.array(userTableSchema);
 
-export type UserTable = z.infer<typeof userTableSchema>;
+export type IUserTable = z.infer<typeof userTableSchema>;

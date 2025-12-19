@@ -1,6 +1,6 @@
 "use client";
 
-import { useCurrentUser } from "@/features/auth";
+import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
 import { useAuth } from "@/shared/context/auth";
 import { PropsWithChildren } from "react";
 import { GraduationCap } from "lucide-react";
