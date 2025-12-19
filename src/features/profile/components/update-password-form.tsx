@@ -11,15 +11,16 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { useForm } from "react-hook-form";
-import {
-  UpdatePassword,
-  updatePasswordSchema,
-} from "../schemas/update-password";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormError } from "@/shared/components/ui/form-error";
 import { getErrorMessage } from "@/shared/lib/api/errors";
 import { toast } from "sonner";
 import { apiClient } from "@/shared/lib/api/client";
+import {
+  UpdatePassword,
+  updatePasswordSchema,
+} from "../schemas/update-password";
 
 export function UpdatePasswordForm() {
   const form = useForm<UpdatePassword>({
@@ -34,7 +35,7 @@ export function UpdatePasswordForm() {
 
   const onSubmit = async (data: UpdatePassword) => {
     try {
-      await apiClient.put("/auth/password/update", data);
+      await apiClient.put("/user/password/update", data);
       toast.success("Senha atualizada com sucesso!");
       form.reset();
     } catch (error) {

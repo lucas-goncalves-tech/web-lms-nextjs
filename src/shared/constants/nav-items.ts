@@ -1,4 +1,4 @@
-import { Award, Lock, BookOpen, BookA, Users } from "lucide-react";
+import { Award, BookOpen, BookA, Users, User } from "lucide-react";
 
 export const navItems = [
   {
@@ -12,9 +12,9 @@ export const navItems = [
     icon: Award,
   },
   {
-    title: "Segurança",
-    href: "/secure",
-    icon: Lock,
+    title: "Perfil",
+    href: "/profile",
+    icon: User,
   },
 ];
 

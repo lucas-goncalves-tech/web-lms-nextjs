@@ -22,18 +22,24 @@ import {
   AvatarImage,
 } from "@/shared/components/ui/avatar";
 import { Button } from "../ui/button";
-import { useLogout } from "@/features/auth";
-import { useAuth } from "@/shared/context/auth";
 import { SidebarSkeleton } from "./sidebar-loading";
 import { adminNavItems, navItems } from "@/shared/constants/nav-items";
+import { useAuth } from "@/shared/context/auth";
+import { useLogout } from "@/features/auth";
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, setIsLoading } = useAuth();
   const { mutate: logout } = useLogout();
   const { setOpenMobile } = useSidebar();
 
   if (!user) return <SidebarSkeleton />;
+
+  function handleLogout() {
+    setIsLoading(true);
+    setOpenMobile(false);
+    logout();
+  }
 
   return (
     <Sidebar>
@@ -114,7 +120,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Sair">
-              <Button className="w-full justify-start" onClick={() => logout()}>
+              <Button className="w-full justify-start" onClick={handleLogout}>
                 <LogOut className="h-4 w-4" />
                 <span>Sair</span>
               </Button>
