@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { CourseForm } from "../schemas/course-form";
-import { useDeleteCourse } from "@/features/admin";
+import { useDeleteCourse } from "../hooks/use-delete-course";
 
 type Props = {
   course: CourseForm;

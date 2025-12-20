@@ -1,13 +1,11 @@
-// admin-course-header.tsx
 "use client";
 
-import { useGetCourse } from "@/features/course/hooks/use-get-course";
 import { PageHeader } from "@/components/ui/page-header";
 import { formatHoursMinutes } from "@/lib/utils/format-duration";
+import { StatCard, useGetCourse } from "@/modules/course";
 import { Clock, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { StatCard } from "@/features/course";
 
 type Props = {
   courseSlug: string;

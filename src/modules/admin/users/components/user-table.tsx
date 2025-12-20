@@ -9,8 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { TableSkeleton } from "./table-skeleton";
-import { MobileCardSkeleton } from "./mobile-card-skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserActionsDropdown } from "./user-actions-dropdown";
-import { useGetUsersTable } from "./hooks/use-get-users-table";
 import { UserCreateFormDialog } from "./user-create-form-dialog";
 import {
   Pagination,
@@ -34,6 +31,9 @@ import {
 } from "@/components/ui/pagination";
 import { SearchIcon } from "lucide-react";
 import { FormEvent, useRef } from "react";
+import { useGetUsersTable } from "../hooks/use-get-users-table";
+import { MobileCardSkeleton } from "../../shared/mobile-card-skeleton";
+import { TableSkeleton } from "../../shared/table-skeleton";
 
 export type UserForm = {
   id: string;

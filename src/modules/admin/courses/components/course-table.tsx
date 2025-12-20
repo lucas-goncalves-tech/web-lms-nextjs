@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { CourseActionsDropdown } from "./course-action-dropdown";
-import { TableSkeleton } from "../../../../features/admin/table-skeleton";
 import { CourseFormDialog } from "./course-form-dialog";
-import { MobileCardSkeleton, useGetCoursesTable } from "@/features/admin";
+import { useGetCoursesTable } from "../hooks/use-get-courses-table";
+import { MobileCardSkeleton } from "../../shared/mobile-card-skeleton";
+import { TableSkeleton } from "../../shared/table-skeleton";
 
 export function CourseTable() {
   const { data: courses, isLoading, isError } = useGetCoursesTable();

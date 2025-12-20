@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { publicRoutes } from "@/shared/constants/public-routes";
+import { publicRoutes } from "./lib/constants/public-routes";
 
 export function middleware(req: NextRequest) {
   const sidName =

@@ -15,7 +15,7 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 import { UserForm } from "./user-table";
-import { useDeleteUser } from "./hooks/use-delete-user";
+import { useDeleteUser } from "../hooks/use-delete-user";
 
 type Props = {
   user: UserForm;

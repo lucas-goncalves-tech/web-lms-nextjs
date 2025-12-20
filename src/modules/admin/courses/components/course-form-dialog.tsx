@@ -22,7 +22,8 @@ import { CreateCourse, createCourseSchema } from "../schemas/create-course";
 import { CourseForm } from "../schemas/course-form";
 import { useState } from "react";
 import { generateSlug } from "@/lib/utils/generate-slug-from-title";
-import { useCreateCourse, useUpdateCourse } from "@/features/admin";
+import { useCreateCourse } from "../hooks/use-create-course";
+import { useUpdateCourse } from "../hooks/use-update-course";
 
 type Props = {
   course?: CourseForm;

@@ -16,9 +16,9 @@ import { Switch } from "@/components/ui/switch";
 import { User, Mail, Lock, Shield, UserIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
-import { useCreateUser } from "./hooks/use-create-user";
 import { useState } from "react";
-import { AdminCreateUser, adminCreateUserSchema } from "./schemas/user-create";
+import { useCreateUser } from "../hooks/use-create-user";
+import { AdminCreateUser, adminCreateUserSchema } from "../schemas/user-create";
 
 export function UserCreateFormDialog() {
   const [open, setOpen] = useState(false);

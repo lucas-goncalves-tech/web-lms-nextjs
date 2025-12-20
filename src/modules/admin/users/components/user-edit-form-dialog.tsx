@@ -17,10 +17,10 @@ import { Pencil, User, Shield, UserIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useForm, Controller } from "react-hook-form";
-import { UserEditForm, userEditSchema } from "./schemas/user-edit";
 import { UserForm } from "./user-table";
-import { useUpdateUser } from "./hooks/use-update-user";
 import { useState } from "react";
+import { useUpdateUser } from "../hooks/use-update-user";
+import { UserEditForm, userEditSchema } from "../schemas/user-edit";
 
 type Props = {
   user: UserForm;
