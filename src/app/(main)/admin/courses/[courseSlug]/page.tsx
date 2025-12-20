@@ -1,5 +1,5 @@
-import { AdminCourseHeader } from "@/features/admin/admin-course-header";
-import { LessonsTable } from "@/features/admin/lessons-table";
+import { AdminCourseHeader } from "@/modules/admin/courses/components/course-header";
+import { LessonsTable } from "@/modules/admin/lessons/components/lessons-table";
 
 type Props = {
   params: Promise<{ courseSlug: string }>;

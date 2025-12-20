@@ -1,5 +1,5 @@
-import { PageHeader } from "@/shared/components/ui/page-header";
-import { CertificatesList } from "@/features/certificates/certificates-list";
+import { PageHeader } from "@/components/ui/page-header";
+import { CertificatesList } from "@/modules/certificates";
 
 export default function CertificatesPage() {
   return (

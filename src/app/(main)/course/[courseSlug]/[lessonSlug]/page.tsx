@@ -1,5 +1,4 @@
-import { LessonHeader } from "@/features/lesson/lesson-header";
-import { LessonPlayer } from "@/features/lesson/lesson-player";
+import { LessonHeader, LessonPlayer } from "@/modules/lesson";
 
 type Props = {
   params: Promise<{

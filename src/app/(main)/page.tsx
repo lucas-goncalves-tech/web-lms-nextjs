@@ -1,4 +1,4 @@
-import { WelcomeBanner, CourseGrid } from "@/features/my-courses";
+import { CourseGrid, WelcomeBanner } from "@/modules/my-courses";
 
 export default function DashboardPage() {
   return (

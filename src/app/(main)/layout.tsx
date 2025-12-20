@@ -1,7 +1,7 @@
-import { SidebarProvider, SidebarInset } from "@/shared/components/ui/sidebar";
-import { AppSidebar, AppHeader } from "@/shared/components/layout";
+import { AppHeader, AppSidebar } from "@/components/layout";
+import { AuthInitializer } from "@/components/providers/auth-initializer";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { PropsWithChildren } from "react";
-import { AuthInitializer } from "@/shared/components/providers/auth-initializer";
 
 export default function MainLayout({ children }: PropsWithChildren) {
   return (

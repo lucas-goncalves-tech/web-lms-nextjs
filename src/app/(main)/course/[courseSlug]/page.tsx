@@ -1,5 +1,4 @@
-import CourseHeader from "@/features/course/course-header";
-import { LessonsList } from "@/features/course/lessons-list";
+import { CourseHeader, LessonsList } from "@/modules/course";
 
 type Props = {
   params: Promise<{

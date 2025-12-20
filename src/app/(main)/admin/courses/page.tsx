@@ -1,5 +1,5 @@
-import { CourseTable } from "@/features/admin/course-table";
-import { PageHeader } from "@/shared/components/ui/page-header";
+import { CourseTable } from "@/modules/admin/courses/components/course-table";
+import { PageHeader } from "@/components/ui/page-header";
 
 export default function AdminCoursesPage() {
   return (
