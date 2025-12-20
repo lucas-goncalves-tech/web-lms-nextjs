@@ -76,16 +76,6 @@ export function LoginForm() {
               <FormError error={errors.password} />
             </div>
 
-            {/* Forgot Password Link */}
-            <div className="flex items-center justify-end">
-              <Link
-                href="#"
-                className="text-sm font-medium text-primary hover:underline"
-              >
-                Esqueceu sua senha?
-              </Link>
-            </div>
-
             {/* Submit Button */}
             <Button className="w-full" disabled={isSubmitting || !isValid}>
               {isSubmitting ? "Entrando..." : "Entrar"}
