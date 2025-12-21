@@ -32,6 +32,13 @@ export function AppSidebar() {
   const { mutate: logout } = useLogout();
   const { setOpenMobile } = useSidebar();
 
+  function transformNameToInitials(name: string) {
+    return name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase())
+      .join("");
+  }
+
   if (!user) return <SidebarSkeleton />;
 
   function handleLogout() {
@@ -46,11 +53,15 @@ export function AppSidebar() {
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
             {isLoading ? (
-              <Skeleton className="size-10 rounded-full" />
+              <Skeleton className="size-full rounded-full" />
             ) : (
-              <AvatarImage src={avatarUrl} alt="Avatar" />
+              <>
+                <AvatarImage src={avatarUrl} alt="Avatar" />
+                <AvatarFallback>
+                  {transformNameToInitials(user.name)}
+                </AvatarFallback>
+              </>
             )}
-            <AvatarFallback>HS</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-1 flex-1 min-w-0">
             <span className="text-sm font-medium text-sidebar-foreground truncate">
