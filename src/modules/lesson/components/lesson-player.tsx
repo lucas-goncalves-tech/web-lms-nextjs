@@ -27,7 +27,6 @@ export function LessonPlayer({ courseSlug, lessonSlug }: Props) {
   const api_url = process.env.NEXT_PUBLIC_API_URL || "";
 
   const handleEndVideo = async () => {
-    console.log("terminou");
     if (!lesson?.completed) {
       await completeLesson();
     }
