@@ -24,6 +24,7 @@ import { useAvatar } from "@/lib/hooks/use-avatar";
 import { useLogout } from "@/modules/auth";
 import { adminNavItems, navItems } from "@/lib/constants/nav-items";
 import { Skeleton } from "../ui/skeleton";
+import { transformNameToInitials } from "@/lib/utils/transform-name-to-initials";
 
 export function AppSidebar() {
   const { data: avatarUrl, isLoading } = useAvatar();
@@ -31,13 +32,6 @@ export function AppSidebar() {
   const { user, setIsLoading } = useAuth();
   const { mutate: logout } = useLogout();
   const { setOpenMobile } = useSidebar();
-
-  function transformNameToInitials(name: string) {
-    return name
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase())
-      .join("");
-  }
 
   if (!user) return <SidebarSkeleton />;
 
