@@ -15,6 +15,7 @@ export function useUpdateAvatar() {
       });
     },
     onSuccess: () => {
+      toast.success("Avatar atualizado com sucesso!");
       queryClient.invalidateQueries({
         queryKey: avatarKeys.unique(),
       });
