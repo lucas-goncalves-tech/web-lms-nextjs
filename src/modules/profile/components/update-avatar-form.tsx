@@ -63,12 +63,13 @@ export function UpdateAvatarForm() {
           <div className="flex flex-col items-center gap-6 md:flex-row">
             <Avatar className="size-36 sm:size-42">
               {isLoading ? (
-                <Skeleton className="size-10 rounded-full" />
+                <Skeleton className="size-full rounded-full" />
               ) : (
-                <AvatarImage src={imageUrl || avatarUrl} alt="Avatar" />
+                <>
+                  <AvatarImage src={imageUrl || avatarUrl} alt="Avatar" />
+                  <AvatarFallback>Avatar</AvatarFallback>
+                </>
               )}
-
-              <AvatarFallback>Avatar</AvatarFallback>
             </Avatar>
             <form onSubmit={onSubmit} className="w-full space-y-5">
               <div>
