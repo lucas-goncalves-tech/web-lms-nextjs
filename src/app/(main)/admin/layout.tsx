@@ -14,7 +14,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
     }
   }, [user, router]);
 
-  if (!user) {
+  if (!user || user?.role !== "ADMIN") {
     return null;
   }
 
