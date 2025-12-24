@@ -18,11 +18,12 @@ export function CertificateItem({
   completed,
   isEven,
 }: CertificateItemProps) {
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   const formattedDate = new Date(completed).toLocaleDateString("pt-BR");
 
   return (
     <Link
-      href={`/certificates/${id}`}
+      href={`${BASE_URL}/certificates/${id}`}
       className={cn(
         "group flex items-center justify-between w-full px-5 py-4 transition-colors",
         isEven ? "bg-muted/30" : "bg-transparent",

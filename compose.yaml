@@ -8,8 +8,15 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
+    logging:
+      driver: local
+      options:
+        max-size: '20m'
+        max-file: '5'
+    restart: unless-stopped    
     environment:
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
     env_file:
       - ./.env.local
+    stop_grace_period: 10s
